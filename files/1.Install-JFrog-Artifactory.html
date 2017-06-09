@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="UTF-8">
+		<title>How-to Install JFrog Artifactory on Ubuntu 14.04</title>
+
+		<link href="https://www.google-analytics.com/" rel="dns-prefetch">
+        <link href="https://hostpresto.com/wp-content/themes/hostpresto/dist/img/favicon.ico" rel="shortcut icon">
+        <link href="https://hostpresto.com/wp-content/themes/hostpresto/dist/img/touch.png" rel="apple-touch-icon-precomposed">
+
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="shortcut icon" href="https://hostpresto.com/wp-content/themes/hostpresto/assets/img/favs/favicon.ico" type="image/x-icon">
+		<link rel="apple-touch-icon" href="https://hostpresto.com/wp-content/themes/hostpresto/assets/img/favs/apple-touch-icon.png">
+		<link rel="apple-touch-icon" sizes="57x57" href="https://hostpresto.com/wp-content/themes/hostpresto/assets/img/favs/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="https://hostpresto.com/wp-content/themes/hostpresto/assets/img/favs/apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="https://hostpresto.com/wp-content/themes/hostpresto/assets/img/favs/apple-touch-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="https://hostpresto.com/wp-content/themes/hostpresto/assets/img/favs/apple-touch-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="https://hostpresto.com/wp-content/themes/hostpresto/assets/img/favs/apple-touch-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="https://hostpresto.com/wp-content/themes/hostpresto/assets/img/favs/apple-touch-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="https://hostpresto.com/wp-content/themes/hostpresto/assets/img/favs/apple-touch-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="https://hostpresto.com/wp-content/themes/hostpresto/assets/img/favs/apple-touch-icon-180x180.png">
+
+		<!-- JM Twitter Cards by Julien Maury 7.8 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@hostpresto">
+<meta name="twitter:site" content="@hostpresto">
+<meta name="twitter:title" content="How-to Install JFrog Artifactory on Ubuntu 14.04">
+<meta name="twitter:description" content="What is Artifactory?Artifactory is a repository manager created by JFrog. A repository manager is a dedicated server application designed to manage binary components for the application that we bu">
+<meta name="twitter:image" content="https://g.twimg.com/Twitter_logo_blue.png">
+<!-- /JM Twitter Cards by Julien Maury 7.8 -->
+
+<!-- All in One SEO Pack 2.3.11.4 by Michael Torbert of Semper Fi Web Design[68,139] -->
+<meta name="description" content="What is Artifactory? Artifactory is a repository manager created by JFrog. A repository manager is a dedicated server application designed to manage binary">
+
+<link rel="canonical" href="https://hostpresto.com/community/tutorials/how-to-install-jfrog-artifactory-on-ubuntu-14-04/">
+<!-- /all in one seo pack -->
+<link rel="dns-prefetch" href="https://ws.sharethis.com/">
+<link rel="dns-prefetch" href="https://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="HostPresto! » How-to Install JFrog Artifactory on Ubuntu 14.04 Comments Feed" href="https://hostpresto.com/community/tutorials/how-to-install-jfrog-artifactory-on-ubuntu-14-04/feed/">
+		<script async="" src="1.Install-JFrog-Artifactory_files/a_004.html"></script><script src="1.Install-JFrog-Artifactory_files/1543355772627886" async=""></script><script async="" src="1.Install-JFrog-Artifactory_files/fbevents.js"></script><script async="" src="1.Install-JFrog-Artifactory_files/analytics.js"></script><script id="facebook-jssdk" src="1.Install-JFrog-Artifactory_files/sdk.js"></script><script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/hostpresto.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.2"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="1.Install-JFrog-Artifactory_files/wp-emoji-release.js" type="text/javascript" defer="defer"></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="dwqa-style-group-css" href="1.Install-JFrog-Artifactory_files/a.css" type="text/css" media="all">
+<script id="st_insights_js" type="text/javascript" src="1.Install-JFrog-Artifactory_files/st_insights.js"></script>
+<script type="text/javascript" src="1.Install-JFrog-Artifactory_files/a"></script>
+<link rel="https://api.w.org/" href="https://hostpresto.com/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://hostpresto.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://hostpresto.com/wp-includes/wlwmanifest.xml"> 
+<meta name="generator" content="WordPress 4.7.2">
+<link rel="shortlink" href="https://hostpresto.com/?p=3337">
+<link rel="alternate" type="application/json+oembed" href="https://hostpresto.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhostpresto.com%2Fcommunity%2Ftutorials%2Fhow-to-install-jfrog-artifactory-on-ubuntu-14-04%2F">
+<link rel="alternate" type="text/xml+oembed" href="https://hostpresto.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhostpresto.com%2Fcommunity%2Ftutorials%2Fhow-to-install-jfrog-artifactory-on-ubuntu-14-04%2F&amp;format=xml">
+<script>(function(d, s, id){
+                 var js, fjs = d.getElementsByTagName(s)[0];
+                 if (d.getElementById(id)) {return;}
+                 js = d.createElement(s); js.id = id;
+                 js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6";
+                 fjs.parentNode.insertBefore(js, fjs);
+               }(document, 'script', 'facebook-jssdk'));</script><style type="text/css">	.ssba {
+									
+									
+									
+									
+								}
+								.ssba img
+								{
+									width: 35px !important;
+									padding: 6px;
+									border:  0;
+									box-shadow: none !important;
+									display: inline !important;
+									vertical-align: middle;
+								}
+								.ssba, .ssba a
+								{
+									text-decoration:none;
+									border:0;
+									background: none;
+									
+									font-size: 	12px;
+									
+									font-weight: light;
+								}
+								.ssba_sharecount:after, .ssba_sharecount:before {
+									right: 100%;
+									border: solid transparent;
+									content: " ";
+									height: 0;
+									width: 0;
+									position: absolute;
+									pointer-events: none;
+								}
+								.ssba_sharecount:after {
+									border-color: rgba(224, 221, 221, 0);
+									border-right-color: #f5f5f5;
+									border-width: 5px;
+									top: 50%;
+									margin-top: -5px;
+								}
+								.ssba_sharecount:before {
+									border-color: rgba(85, 94, 88, 0);
+									border-right-color: #e0dddd;
+									border-width: 6px;
+									top: 50%;
+									margin-top: -6px;
+								}
+								.ssba_sharecount {
+									font: 11px Arial, Helvetica, sans-serif;
+
+									padding: 5px;
+									-khtml-border-radius: 6px;
+									-o-border-radius: 6px;
+									-webkit-border-radius: 6px;
+									-moz-border-radius: 6px;
+									border-radius: 6px;
+									position: relative;
+									border: 1px solid #e0dddd;color: #555e58;
+										background: #ffffff;
+									}
+									.ssba_sharecount:after {
+										border-right-color: #ffffff;
+									}</style>
+		<link href="1.Install-JFrog-Artifactory_files/css.css" rel="stylesheet">
+	<script type="text/javascript" async="" src="1.Install-JFrog-Artifactory_files/embed.js"></script><script async="" type="text/javascript" src="1.Install-JFrog-Artifactory_files/count.js"></script><link rel="prefetch" href="1.Install-JFrog-Artifactory_files/a_data/lounge.css"><link rel="prefetch" href="1.Install-JFrog-Artifactory_files/a_data/common.js"><link rel="prefetch" href="1.Install-JFrog-Artifactory_files/a_data/lounge.js"><link rel="prefetch" href="1.Install-JFrog-Artifactory_files/a_data/config.js"><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}.fb_link img{border:none}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_reset .fb_dialog_legacy{overflow:visible}.fb_dialog_advanced{padding:10px;-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px}.fb_dialog_content{background:#fff;color:#333}.fb_dialog_close_icon{background:url(http://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{top:5px;left:5px;right:auto}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(http://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(http://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_loader{background-color:#f6f7f9;border:1px solid #606060;font-size:24px;padding:20px}.fb_dialog_top_left,.fb_dialog_top_right,.fb_dialog_bottom_left,.fb_dialog_bottom_right{height:10px;width:10px;overflow:hidden;position:absolute}.fb_dialog_top_left{background:url(http://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 0;left:-10px;top:-10px}.fb_dialog_top_right{background:url(http://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -10px;right:-10px;top:-10px}.fb_dialog_bottom_left{background:url(http://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -20px;bottom:-10px;left:-10px}.fb_dialog_bottom_right{background:url(http://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -30px;right:-10px;bottom:-10px}.fb_dialog_vert_left,.fb_dialog_vert_right,.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{position:absolute;background:#525252;filter:alpha(opacity=70);opacity:.7}.fb_dialog_vert_left,.fb_dialog_vert_right{width:10px;height:100%}.fb_dialog_vert_left{margin-left:-10px}.fb_dialog_vert_right{right:0;margin-right:-10px}.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{width:100%;height:10px}.fb_dialog_horiz_top{margin-top:-10px}.fb_dialog_horiz_bottom{bottom:0;margin-bottom:-10px}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(http://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{-webkit-transform:none;height:100%;margin:0;overflow:visible;position:absolute;top:-10000px;left:0;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(http://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{width:auto;height:auto;min-height:initial;min-width:initial;background:none}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{color:#fff;display:block;padding-top:20px;clear:both;font-size:18px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .45);position:absolute;bottom:0;left:0;right:0;top:0;width:100%;min-height:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_content .dialog_header{-webkit-box-shadow:white 0 1px 1px -1px inset;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#738ABA), to(#2C4987));border-bottom:1px solid;border-color:#1d4088;color:#fff;font:14px Helvetica, sans-serif;font-weight:bold;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{-webkit-font-smoothing:subpixel-antialiased;height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#4966A6), color-stop(.5, #355492), to(#2A4887));border:1px solid #29487d;-webkit-background-clip:padding-box;-webkit-border-radius:3px;-webkit-box-shadow:rgba(0, 0, 0, .117188) 0 1px 1px inset, rgba(255, 255, 255, .167969) 0 1px 0;display:inline-block;margin-top:3px;max-width:85px;line-height:18px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{border:none;background:none;color:#fff;font:12px Helvetica, sans-serif;font-weight:bold;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(http://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #555;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f6f7f9;border:1px solid #555;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(http://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-repeat:no-repeat;background-position:50% 50%;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_hide_iframes iframe{position:relative;left:-10000px}.fb_iframe_widget_loader{position:relative;display:inline-block}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}.fb_iframe_widget_loader iframe{min-height:32px;z-index:2;zoom:1}.fb_iframe_widget_loader .FB_Loader{background:url(http://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat;height:32px;width:32px;margin-left:-16px;position:absolute;left:50%;z-index:4}</style></head>
+
+	<body>
+		<header>
+			<div class="container">
+				<a href="https://hostpresto.com/" class="logo">
+					<img src="1.Install-JFrog-Artifactory_files/logo-white.svg">
+				</a>
+				<nav class="primary hidden-xs hidden-sm">
+					<a href="#" data-megamenu="web-hosting">Hosting <span class="triangle"></span></a>
+					<a class="toplevel" href="https://hostpresto.com/domain-names/">Domains</a>
+					<a href="#" data-megamenu="cloud">Cloud Servers</a>
+					<a class="toplevel hidden-md" href="https://hostpresto.com/apps/wordpress-hosting/">Wordpress</a>
+					<a href="#" data-megamenu="more">More</a>
+					<a href="https://hostpresto.com/my/" class="highlighted">
+						<img src="1.Install-JFrog-Artifactory_files/person.svg"> My HP
+					</a>
+				</nav>
+				<a href="#" class="burger hidden-lg hidden-md" id="sidemenu-trigger">
+					<span></span>
+					<span></span>
+					<span></span>
+				</a>
+			</div>
+			<section class="megamenu" id="megamenu-web-hosting">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-6 megamenu-multi">
+							<h2>Web Hosting</h2>
+							<nav>
+								<a href="https://hostpresto.com/web-hosting/">
+									Web Hosting
+									<span>Fast, reliable and cloud hosted</span>
+								</a>
+								<a href="https://hostpresto.com/reseller-hosting/">
+									Reseller Hosting
+									<span>Host many sites under a white label</span>
+								</a>
+								<a href="https://hostpresto.com/email-hosting/">
+									Email Hosting
+									<span>Robust enterprise grade email hosting</span>
+								</a>
+							</nav>
+							<h2>Addons</h2>
+							<nav>
+								<a href="https://hostpresto.com/ssl-certificates/">
+									SSL Certificates
+									<span>Get secure and gain customer confidence</span>
+								</a>
+								<a href="https://hostpresto.com/web-hosting/migrating/">
+									Migration Service
+									<span>Moving can be hardwork, let us help</span>
+								</a>
+							</nav>
+						</div>
+						<div class="col-sm-6 megamenu-multi">
+							<h2>Applications</h2>
+							<nav>
+								<a href="https://hostpresto.com/apps/wordpress-hosting/">
+									Wordpress Hosting
+									<span>Blazing fast optimised and fully compatible</span>
+								</a>
+								<a href="https://hostpresto.com/apps/magento-hosting/">
+									Magento Hosting
+									<span>Fully optimised Magento hosting</span>
+								</a>
+								<a href="https://hostpresto.com/apps/joomla-hosting/">
+									Joomla Hosting
+									<span>Joomla pre-installed and ready to go</span>
+								</a>
+								<a href="https://hostpresto.com/apps/prestashop-hosting/">
+									PrestaShop Hosting
+									<span>Pre-isntalled and ready to go</span>
+								</a>
+								<a href="https://hostpresto.com/apps/">
+									View All Apps
+									<span>View all of our hosted applications</span>
+								</a>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="megamenu" id="megamenu-cloud">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-4 megamenu-single">
+							<div class="row">
+								<div class="col-sm-2">
+									<img src="1.Install-JFrog-Artifactory_files/server.svg" class="img-responsive">
+								</div>
+								<div class="col-sm-9">
+									<h2><a href="https://hostpresto.com/cloud-servers/managed-cloud-servers/">ManagedCloud Servers</a></h2>
+									<p>
+										High performance handled and monitored by us 24/7/365. A 
+complete solution to provide you with our in house expertise 24/7 
+tailored to your specific needs. We'll setup a bespoke server for your 
+site using the latest tehnologies so you can get the most out of your 
+hardware and get your website loading quickly and reliably.
+										<a href="https://hostpresto.com/cloud-servers/managed-cloud-servers/">Find out more..</a>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4 megamenu-single">
+							<div class="row">
+								<div class="col-sm-2">
+									<img src="1.Install-JFrog-Artifactory_files/server.svg" class="img-responsive">
+								</div>
+								<div class="col-sm-9">
+									<h2><a href="https://hostpresto.com/cloud-servers/cpanel-cloud-servers/">cPanelCloud Servers</a></h2>
+									<p>
+										<a href="https://hostpresto.com/cloud-servers/cpanel-cloud-servers/" style="display: inline">Recommended</a>
+ - High performance cloud servers with no technical knowledge required. 
+ If you're hosting multiple websites already and you're looking to 
+consolidate, or if you're looking to isolate yourself from the shared 
+hosting environment but you don't have the time or knoweldge to manage a
+ server, then the Managed cPanel Servers are for you.
+										<a href="https://hostpresto.com/cloud-servers/cpanel-cloud-servers/">Find out more..</a>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4 megamenu-single">
+							<div class="row">
+								<div class="col-sm-2">
+									<img src="1.Install-JFrog-Artifactory_files/server.svg" class="img-responsive">
+								</div>
+								<div class="col-sm-9">
+									<h2><a href="https://hostpresto.com/cloud-servers/unmanaged-cloud-servers/">UnmanagedCloud Servers</a></h2>
+									<p>
+										Our unmanaged range gives you complete control at rock bottom 
+prices and our cloud platform boasts super fast multipath 40Gb/s 
+network, the latest Intel Xeon V3 CPUs and enterprise grade redundant 
+SSDs.  If you're a sysadmin look no further, we offer some of the best 
+specification to price ratio servers available.
+										<a href="https://hostpresto.com/cloud-servers/unmanaged-cloud-servers/">Find out more..</a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="megamenu" id="megamenu-more">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-4 megamenu-multi">
+							<h2>Other Hosting</h2>
+							<nav>
+								<a href="https://hostpresto.com/cpanel-hosting/">
+									cPanel Hosting
+									<span>The best cPanel hosting you'll find</span>
+								</a>
+								<a href="https://hostpresto.com/php-hosting/" "="">
+									PHP Hosting
+									<span>Blazing fast PHP 4 to 7 hosting</span>
+								</a>
+								<a href="https://hostpresto.com/django-hosting/" "="">
+									Django Hosting
+									<span>Easy to use gui with module installer</span>
+								</a>
+							</nav>
+						</div>
+						<div class="col-sm-4 megamenu-multi">
+							<h2>Additional Services</h2>
+							<nav>
+								<a href="https://hostpresto.com/website-builder/" "="">
+									Website Builder
+									<span>Drag &amp; Drop website builder for complete novices</span>
+								</a>
+								<a href="https://hostpresto.com/ssl-certificates/" "="">
+									SSL Certificates
+									<span>Get secure and gain customer confidence</span>
+								</a>
+								<a href="https://hostpresto.com/docker-hosting/">
+									Docker Hosting
+									<span>Flexible and scalable container hosting</span>
+								</a>
+							</nav>
+						</div>
+						<div class="col-sm-4 megamenu-multi">
+							<h2>Account &amp; Help</h2>
+							<nav>
+								<a href="https://hostpresto.com/my/">
+									My HostPresto
+									<span>Already a customer? Login here!</span>
+								</a>
+								<a href="https://hostpresto.com/help/">
+									Help Centre
+									<span>Easy to follow guides to cover almost everything</span>
+								</a>
+								<a href="https://hostpresto.com/community/">
+									Community
+									<span>See our community tutorials and Q&amp;A</span>
+								</a>
+								<a href="https://hostpresto.com/contact/">
+									Contact
+									<span>Drop us an email, we love to talk</span>
+								</a>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</section>
+		</header>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-offset-2 col-sm-8">
+			<div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+			    <!-- Breadcrumb NavXT 5.6.0 -->
+<span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to HostPresto!." href="https://hostpresto.com/" class="home"><span property="name">HostPresto!</span></a><meta property="position" content="1"></span> &gt; <span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to the Community category archives." href="https://hostpresto.com/community/" class="taxonomy category"><span property="name">Community</span></a><meta property="position" content="2"></span> &gt; <span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to the Tutorials category archives." href="https://hostpresto.com/community/tutorials/" class="taxonomy category"><span property="name">Tutorials</span></a><meta property="position" content="3"></span> &gt; <span property="itemListElement" typeof="ListItem"><span property="name">How-to Install JFrog Artifactory on Ubuntu 14.04</span><meta property="position" content="4"></span>			</div>
+		</div>
+	</div>
+</div>
+			<section class="main header text-center article-header">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-8">
+						<div class="article-social">
+							<span class="author-avatar hidden-xs">
+								<img src="1.Install-JFrog-Artifactory_files/ee7136d39118c02b186942d6f64c2696.jpeg" class="img-circle">
+							</span>
+							<span class="author-name"><a href="https://hostpresto.com/author/muhammadp/" title="Posts by Muhammad Panji" rel="author">Muhammad Panji</a></span>
+							<span class="share"><!-- Simple Share Buttons Adder (6.3.4) simplesharebuttons.com --><div class="ssba ssba-wrap"><div style="text-align:left"><a data-site="" class="ssba_facebook_share" href="http://www.facebook.com/sharer.php?u=https://hostpresto.com/community/tutorials/how-to-install-jfrog-artifactory-on-ubuntu-14-04/" target="_blank"><img src="1.Install-JFrog-Artifactory_files/facebook.png" title="Facebook" class="ssba ssba-img" alt="Share on Facebook"></a><span class="ssba_sharecount">0</span><a data-site="" class="ssba_twitter_share" href="http://twitter.com/share?url=https://hostpresto.com/community/tutorials/how-to-install-jfrog-artifactory-on-ubuntu-14-04/&amp;text=How-to+Install+JFrog+Artifactory+on+Ubuntu+14.04+" target="_blank"><img src="1.Install-JFrog-Artifactory_files/twitter.png" title="Twitter" class="ssba ssba-img" alt="Tweet about this on Twitter"></a><a data-site="reddit" class="ssba_reddit_share" href="http://reddit.com/submit?url=https://hostpresto.com/community/tutorials/how-to-install-jfrog-artifactory-on-ubuntu-14-04/&amp;title=How-to%20Install%20JFrog%20Artifactory%20on%20Ubuntu%2014.04" target="_blank"><img src="1.Install-JFrog-Artifactory_files/reddit.png" title="Reddit" class="ssba ssba-img" alt="Share on Reddit"></a><span class="ssba_sharecount">0</span><a data-site="stumbleupon" class="ssba_stumbleupon_share ssba_share_link" href="http://www.stumbleupon.com/submit?url=https://hostpresto.com/community/tutorials/how-to-install-jfrog-artifactory-on-ubuntu-14-04/&amp;title=How-to%20Install%20JFrog%20Artifactory%20on%20Ubuntu%2014.04" target="_blank"><img src="1.Install-JFrog-Artifactory_files/stumbleupon.png" title="StumbleUpon" class="ssba ssba-img" alt="Share on StumbleUpon"></a><span class="ssba_sharecount">64</span></div></div></span>
+						</div>
+						
+						<h1>How-to Install JFrog Artifactory on Ubuntu 14.04</h1>
+						<div class="article-meta">
+							<span class="date">12th July 2016</span>
+							<span class="views"><i class="fa fa-eye"></i> 3,749k</span>
+							<span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="full-article">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-8">
+						<article id="post-3337" class="post-3337 post type-post status-publish format-standard hentry category-tutorials">
+							<img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/1189422681.png" alt="Artifactory Logo"><h2>What is Artifactory?</h2><p>Artifactory is a repository manager created by <a href="https://www.jfrog.com/">JFrog</a>. A repository manager is a dedicated server application designed to manage binary components for the application that we build.</p><p>Using a repository manager is one of the best practice for using any build tools, whether we use <a href="https://maven.apache.org/">maven</a>, <a href="https://gradle.org/">Gradle</a>, or <a href="https://ant.apache.org/">Ant</a>.</p><p>Several benefits of using a repository manager accroding to the <a href="https://maven.apache.org/repository-management.html">maven website</a>:</p><ul>
+<li>Reduce number of downloads from remote repositories, this can save not only bandwidth but also time.</li>
+<li>Improve build stability since you are less dependent on external repositories.</li>
+<li>Increase performance for interaction with remote SNAPSHOT repositories.</li>
+<li>Potential for control consumed and provided artifacts.</li>
+<li>Create a central storage and access to artifacts and metadata that 
+can be used by another developer, even another projects. QA and 
+operations team also get the benefits by using the same binary.</li>
+<li>Become effective platform for exchanging binary artifact within and 
+beyond your organization without the need of building the source.</li>
+</ul><p>Sharing source code of the components might seems easier and can
+ easily be done but with large number of developers and projects it will
+ be difficult to track which application use which version of components
+ since the component source code can also be updated by the developers 
+of specific project.</p><p>Using an artifact repository manager will make sure which (binary) component is being used on an application.</p><p>Several features of JFrog Artifactory :</p><ul>
+<li><strong>Reliability</strong> : As a local proxy to the outside world, Artifactory guarantees consistent access to the components needed by your build tools.</li>
+<li><strong>Efficiency</strong> : Remote artifacts are cached locally for reuse, so that you don’t have to download them over and over again.</li>
+<li><strong>Security</strong> : Advanced security features give you control over who can access your artifacts, and where they can deploy them.</li>
+<li><strong>Stability</strong> : Supports large load bursts with extremely high concurrency and unmatched data integrity.</li>
+<li><strong>Automation</strong> :Automate all aspects of artifact management using a powerful REST API.</li>
+</ul><p>There are SaaS version and also self hosted version of artifactory.</p><p>The
+ self-hosted version divided into three versions: OSS, Pro and 
+Enterprise. The Pro and Enterprise versions have features that is not 
+available on OSS version. Features that supported on Artifactory OSS 
+versions are:</p><ul>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Configuring+Repositories#ConfiguringRepositories-RemoteRepositories">Proxy and Cache Remote Repository Artifacts</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Deploying+via+the+Web+UI">Deploy Artifacts via the UI</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API#ArtifactoryRESTAPI-DeployArtifact">Deploy Artifacts v=via REST/HTTP</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API#ArtifactoryRESTAPI-DeployArtifactsfromArchive">Bulk Artifact Deployment (from Archive)</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Using+Artifactory">Intuitive Slick Web UI</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Managing+Security+with+LDAP">LDAP Authentication</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Managing+Permissions">Role Based Authorization</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Common+Settings#CommonSettings-IncludesandExcludesPattern">Include/exclude patterns for Stored Artifacts</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Searching+Artifacts">Search by Name, Class, Module Info, XPath Values</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Manipulating+Artifacts">UI-based Move/Copy/Delete</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Changing+the+Default+Storage#ChangingtheDefaultStorage-%22Once-And-Only-Once%22ContentStorage">Smart "No-Duplicates" Storage</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Managing+Backups">Incremental and Historical Backup Services</a></li>
+<li><a href="http://www.jfrog.com/confluence/display/RTF/Build+Integration">Integration With Leading CI-servers</a>: Jenkins / Hudson, Bamboo, MSBuild, and TeamCity.</li>
+<li><a href="https://www.jfrog.com/confluence/display/RTF/Artifactory+Query+Language">Artifactory Query Language</a></li>
+</ul><p>Previously we learned <a href="https://hostpresto.com/community/tutorials/how-to-create-a-repository-manager-with-apache-archiva-on-ubuntu-14-04/">how-to install Apache Archiva on Ubuntu 14.04</a>. In this tutorial we'll learn how-to install and configure Artifactory open source edition on Ubuntu 14.04.</p><h2>Components</h2><p>For this setup we will use these components:</p><ul>
+<li><strong>Oracle JDK 8</strong>. Artifactory is Java software, so we will use Oracle Java 8 to run Artifactory.</li>
+<li><strong>MySQL 5.6</strong>. Artifactory comes with built in Derby 
+database. It's not a strict requirement but highly recommended to use 
+external database. Artifactory support MySQL, PostgreSQL, Oracle and 
+MSSQL Server. In this tutorial we'll setup MySQL server as external 
+database but on the same server with Artifactory. When needed in the 
+future you can easily migrate the database to dedicated MySQL instance.</li>
+<li><strong>Nginx</strong>. Artifactory run on top of Tomcat as 
+application server. We can access artifactory directly but we will use 
+Nginx as reverse proxy for Tomcat / Artifactory. We will also setup SSL 
+on Nginx so SSL termination will happen on Nginx instead of on Tomcat.</li>
+</ul><h2>Update Base System</h2><p>This tutorial assume we have clean minimalist install of Ubuntu Server 14.04 Trusty Tahr.</p><p>Before we install JFrog Artifactory and the components needed, let's update the base system by running command below</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">apt-get</span> update
+    $ <span class="token function">sudo</span> <span class="token function">apt-get</span> -y upgrade
+</code></pre><h2>Installing Oracle JDK 8</h2><p>Now, let's install Java Development Kit 8. We will use Oracle JDK instead of OpenJDK version of JDK 8. 
+We'll also use <code>webupd8team</code> ppa repository instead of installing JDK manually.
+Add webupd8team PPA repository.</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> add-apt-repository ppa:webupd8team/java
+     Oracle Java <span class="token punctuation">(</span>JDK<span class="token punctuation">)</span> Installer <span class="token punctuation">(</span>automatically downloads and installs Oracle JDK7 / JDK8 / JDK9<span class="token punctuation">)</span>. There are no actual Java files <span class="token keyword">in</span> this PPA.More info <span class="token punctuation">(</span>and Ubuntu installation instructions<span class="token punctuation">)</span>:
+    - <span class="token keyword">for</span> Oracle Java 7: http://www.webupd8.org/2012/01/install-oracle-java-jdk-7-in-ubuntu-via.html
+    - <span class="token keyword">for</span> Oracle Java 8: http://www.webupd8.org/2012/09/install-oracle-java-8-in-ubuntu-via-ppa.htmlDebian installation instructions:
+    - Oracle Java 7: http://www.webupd8.org/2012/06/how-to-install-oracle-java-7-in-debian.html
+    - Oracle Java 8: http://www.webupd8.org/2014/03/how-to-install-oracle-java-8-in-debian.htmlImportant<span class="token operator">!</span><span class="token operator">!</span><span class="token operator">!</span> For now, you should <span class="token keyword">continue</span> to use Java 8 because Oracle Java 9 is available as an early access release <span class="token punctuation">(</span>it should be released <span class="token keyword">in</span> 2016<span class="token punctuation">)</span><span class="token operator">!</span> You should only use Oracle Java 9 <span class="token keyword">if</span> you explicitly need it, because it may contain bugs and it might not include the latest security patches<span class="token operator">!</span> Also, some Java options were removed <span class="token keyword">in</span> JDK9, so you may encounter issues with various Java apps. More information and installation instructions <span class="token punctuation">(</span>Ubuntu / Linux Mint / Debian<span class="token punctuation">)</span>: http://www.webupd8.org/2015/02/install-oracle-java-9-in-ubuntu-linux.html
+     More info: https://launchpad.net/~webupd8team/+archive/ubuntu/java
+    Press <span class="token punctuation">[</span>ENTER<span class="token punctuation">]</span> to <span class="token keyword">continue</span> or ctrl-c to cancel adding it</code><p><code class=" language-bash">gpg: keyring `/tmp/tmpaz5gxp9d/secring.gpg<span class="token string">' created
+    gpg: keyring `/tmp/tmpaz5gxp9d/pubring.gpg'</span> created
+    gpg: requesting key EEA14886 from hkp server keyserver.ubuntu.com
+    gpg: /tmp/tmpaz5gxp9d/trustdb.gpg: trustdb created
+    gpg: key EEA14886: public key <span class="token string">"Launchpad VLC"</span> imported
+    gpg: no ultimately trusted keys found
+    gpg: Total number processed: 1
+    gpg:               imported: 1  <span class="token punctuation">(</span>RSA: 1<span class="token punctuation">)</span>
+    OK
+</code></p></pre><p></p><p>Update repository metadata.</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">apt-get</span> update
+</code></pre><p>Install Oracle JDK 8.</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">apt-get</span> -y <span class="token function">install</span> oracle-java8-installer
+</code></pre><p>Package configuration. Choose OK.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/1594637328.png" alt="">
+Accepting <strong>Oracle Binary Code Lisence Terms</strong>. Choose <code>Yes</code><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/1525872870.png" alt=""><p>Check Java version by running command below.</p><pre class=" language-bash"><code class=" language-bash">    $ java -version
+    java version <span class="token string">"1.8.0_91"</span>
+    Java<span class="token punctuation">(</span>TM<span class="token punctuation">)</span> SE Runtime Environment <span class="token punctuation">(</span>build 1.8.0_91-b14<span class="token punctuation">)</span>
+    Java HotSpot<span class="token punctuation">(</span>TM<span class="token punctuation">)</span> 64-Bit Server VM <span class="token punctuation">(</span>build 25.91-b14, mixed mode<span class="token punctuation">)</span>
+</code></pre><h2>Install MySQL 5.6</h2><p>We will install and use MySQL 5.6 as database for Artifactory. We will use MySQL Server 5.6</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">apt-get</span> -y <span class="token function">install</span> mysql-server-5.6
+</code></pre><p>We need to setup MySQL <code>root</code> password. Please</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/960832776.png" alt=""><p>Verify <code>root</code> password.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/1856530910.png" alt=""><h3>Securing the MySQL Installation</h3><p>We will secure MySQL installation by running <code>mysql_secure_installation</code>.</p><p>Enter the root password that we set on installation</p><pre class=" language-bash"><code class=" language-bash">    $ mysql_secure_installation 
+    NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MySQL
+          SERVERS IN PRODUCTION USE<span class="token operator">!</span>  PLEASE READ EACH STEP CAREFULLY<span class="token operator">!</span>In order to log into MySQL to secure it, we<span class="token string">'ll need the current
+    password for the root user.  If you'</span>ve just installed MySQL, and
+    you haven't <span class="token keyword">set</span> the root password yet, the password will be blank,
+    so you should just press enter here.</code><p><code class=" language-bash">Enter current password <span class="token keyword">for</span> root <span class="token punctuation">(</span>enter <span class="token keyword">for</span> none<span class="token punctuation">)</span>: 
+    OK, successfully used password, moving on<span class="token punctuation">..</span>.
+</code></p></pre><p></p><p>Since we already have root password set, answer this part with <code>n</code></p><pre class=" language-bash"><code class=" language-bash">    Setting the root password ensures that nobody can log into the MySQL
+    root user without the proper authorisation.You already have a root password set, so you can safely answer <span class="token string">'n'</span><span class="token keyword">.</span></code><p><code class=" language-bash">Change the root password? <span class="token punctuation">[</span>Y/n<span class="token punctuation">]</span> n
+     <span class="token punctuation">..</span>. skipping.
+</code></p></pre><p></p><p>Remove anonymous user to improve security. 
+This will make sure people or application have correct username and 
+password to login to MySQL. Answer with <code>Y</code></p><pre class=" language-bash"><code class=" language-bash">    By default, a MySQL installation has an anonymous user, allowing anyone
+    to log into MySQL without having to have a user account created <span class="token keyword">for</span>
+    them.  This is intended only <span class="token keyword">for</span> testing, and to <span class="token function">make</span> the installation
+    go a bit smoother.  You should remove them before moving into a
+    production environment.Remove anonymous users? <span class="token punctuation">[</span>Y/n<span class="token punctuation">]</span> Y
+     <span class="token punctuation">..</span>. Success<span class="token operator">!</span></code></pre><p>We also want remove <code>root</code> login from remote machine. Answer with <code>Y</code></p><pre class=" language-bash"><code class=" language-bash">    Normally, root should only be allowed to connect from <span class="token string">'localhost'</span><span class="token keyword">.</span>  This
+    ensures that someone cannot guess at the root password from the network.</code><p><code class=" language-bash">Disallow root login remotely? <span class="token punctuation">[</span>Y/n<span class="token punctuation">]</span> Y
+     <span class="token punctuation">..</span>. Success<span class="token operator">!</span>
+</code></p></pre><p></p><p>Previously the <code>test</code> database created automatically by MySQL installation, but MySQL 5.6 does not create <code>test</code> database. We can still choose <code>Y</code>, it will throw error but that's fine.</p><pre class=" language-bash"><code class=" language-bash">    By default, MySQL comes with a database named <span class="token string">'test'</span> that anyone can
+    access.  This is also intended only <span class="token keyword">for</span> testing, and should be removed
+    before moving into a production environment.</code><p><code class=" language-bash">Remove <span class="token function">test</span> database and access to it? <span class="token punctuation">[</span>Y/n<span class="token punctuation">]</span> Y
+     - Dropping <span class="token function">test</span> database<span class="token punctuation">..</span>.
+    ERROR 1008 <span class="token punctuation">(</span>HY000<span class="token punctuation">)</span> at line 1: Can<span class="token string">'t drop database '</span><span class="token function">test</span><span class="token string">'; database doesn'</span>t exist
+     <span class="token punctuation">..</span>. Failed<span class="token operator">!</span>  Not critical, keep moving<span class="token punctuation">..</span>.
+     - Removing privileges on <span class="token function">test</span> database<span class="token punctuation">..</span>.
+     <span class="token punctuation">..</span>. Success<span class="token operator">!</span>
+</code></p></pre><p></p><p>The last step is to reload MySQL privilege table.</p><pre class=" language-bash"><code class=" language-bash">    Reloading the privilege tables will ensure that all changes made so far
+    will take effect immediately.Reload privilege tables now? <span class="token punctuation">[</span>Y/n<span class="token punctuation">]</span> Y
+     <span class="token punctuation">..</span>. Success<span class="token operator">!</span>All done<span class="token operator">!</span>  If you've completed all of the above steps, your MySQL
+    installation should now be secure.Thanks <span class="token keyword">for</span> using MySQL<span class="token operator">!</span></code><p><code class=" language-bash">Cleaning up<span class="token punctuation">..</span>.
+</code></p></pre><p></p><h3>Create a Database for Artifactory</h3><p>Now we have a secure MySQL installation, it's time to create database and user for Artifactory itself.</p><p>Login to MySQL using <code>root</code> credentials</p><pre class=" language-bash"><code class=" language-bash">    $ mysql -u root -p
+    Enter password: 
+    Welcome to the MySQL monitor.  Commands end with <span class="token punctuation">;</span> or g.
+    Your MySQL connection <span class="token function">id</span> is 58
+    Server version: 5.6.30-0ubuntu0.14.04.1 <span class="token punctuation">(</span>Ubuntu<span class="token punctuation">)</span>Copyright <span class="token punctuation">(</span>c<span class="token punctuation">)</span> 2000, 2016, Oracle and/or its affiliates. All rights reserved.Oracle is a registered trademark of Oracle Corporation and/or its
+    affiliates. Other names may be trademarks of their respective
+    owners.Type <span class="token string">'help;'</span> or <span class="token string">'h'</span> <span class="token keyword">for</span> help. Type <span class="token string">'c'</span> to <span class="token function">clear</span> the current input statement.</code><p><code class=" language-bash">mysql<span class="token operator">&gt;</span>
+</code></p></pre><p></p><p>Create new database named <code>artdb</code> using the command below</p><pre class=" language-bash"><code class=" language-bash">    mysql<span class="token operator">&gt;</span> CREATE DATABASE artdb<span class="token punctuation">;</span>
+    Query OK, 1 row affected <span class="token punctuation">(</span>0.00 sec<span class="token punctuation">)</span>
+</code></pre><h3>Create a User for Artifactory</h3><p>The database for Artifactory is ready, let's create username and password and grant privileges to <code>artifactory</code> database.</p><p>Don't forget to <code>FLUSH PRIVILEGES</code> so that the privileges table will be reloaded by MySQL and we can use new credential.</p><p>Don't forget to change the password <code>verysecret</code> below with better password.</p><pre class=" language-bash"><code class=" language-bash">    mysql<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON <span class="token variable"><span class="token variable">`</span>artdb<span class="token variable">`</span></span>.* TO <span class="token string">'artifactory'</span>@<span class="token string">'localhost'</span> IDENTIFIED BY <span class="token string">'verysecret'</span><span class="token punctuation">;</span>
+    Query OK, 0 rows affected <span class="token punctuation">(</span>0.00 sec<span class="token punctuation">)</span></code><p><code class=" language-bash">mysql<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> FLUSH PRIVILEGES<span class="token punctuation">;</span>
+    Query OK, 0 rows affected <span class="token punctuation">(</span>0.00 sec<span class="token punctuation">)</span>
+</code></p></pre><p></p><p>Exit from MySQL console by typing <code>q</code></p><pre class=" language-bash"><code class=" language-bash">    mysql<span class="token operator">&gt;</span> q
+</code></pre><h2>Install Nginx</h2><p>We will install Nginx from 
+nginx.org repository instead of from ubuntu repository. The reason is 
+that nginx.org repository provide newer version of nginx.</p><p>First 
+let's add Nginx.org package signing key. We add this key so apt can 
+verify that the packages that we download from nginx repository is not 
+tampered on the way to our server.</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">wget</span> -c -O- http://nginx.org/keys/nginx_signing.key <span class="token operator">|</span> <span class="token function">sudo</span> apt-key add -
+</code></pre><p>Add nginx.org Repository</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token keyword">echo</span> <span class="token string">"deb http://nginx.org/packages/ubuntu/ trusty nginx"</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> -a /etc/apt/sources.list.d/nginx.list <span class="token operator">&gt;</span> /dev/null
+</code></pre><p>Update apt metadata so that it know the contents of Nginx.org repository and install Nginx.</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">apt-get</span> update
+    $ <span class="token function">sudo</span> <span class="token function">apt-get</span> -y <span class="token function">install</span> nginx
+</code></pre><p>Now we have nginx installed, we can check it by checking the status of  the service :</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">service</span> nginx status
+</code></pre><h2>Configure Nginx Sites For Artifactory</h2><p>In this tutorial we'll learn how to configure Nginx to serve as an http only proxy and https only proxy.</p><p>The configuration directory structure created by nginx package from <code>nginx.org</code>
+ repository is a little bit different with the configuration of the 
+Nginx package from Ubuntu repository. We will reconfigure Nginx 
+configuration directory to make it easier to enable and disable site 
+configuration.</p><p>Create two new directories named <code>sites-available</code> and <code>sites-enabled</code> with commands below:</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">mkdir</span> /etc/nginx/sites-available
+    $ <span class="token function">sudo</span> <span class="token function">mkdir</span> /etc/nginx/sites-enabled
+</code></pre><p>open <code>/etc/nginx/nginx.conf</code> find line:</p><pre class=" language-bash"><code class=" language-bash">     include /etc/nginx/conf.d/*.conf<span class="token punctuation">;</span>
+</code></pre><p>replace with</p><pre class=" language-bash"><code class=" language-bash">     include /etc/nginx/sites-enabled/*.conf<span class="token punctuation">;</span>
+</code></pre><p>Remove contents of /etc/nginx/conf.d</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">rm</span> -f /etc/nginx/conf.d/*
+</code></pre><p>Now we are ready to configure Artifactory site.</p><h3>HTTP Only Configuration</h3><p>Create a file <code>/etc/nginx/sites-available/artifactory.conf</code> with contents below. You need to change <code>server_name</code> line below with the domain name that you plan to use for Artifactory.</p><pre class=" language-bash"><code class=" language-bash">    server <span class="token punctuation">{</span>
+        listen 80 default_server<span class="token punctuation">;</span>
+        listen <span class="token punctuation">[</span>::<span class="token punctuation">]</span>:80 default_server<span class="token punctuation">;</span>server_name artifactory.exampleserver.xyz<span class="token punctuation">;</span>
+        root /usr/share/nginx/artifactory<span class="token punctuation">;</span>proxy_set_header X-Forwarded-For <span class="token variable">$proxy_add_x_forwarded_for</span><span class="token punctuation">;</span>
+        proxy_set_header Host <span class="token variable">$host</span><span class="token punctuation">;</span>
+        proxy_set_header X-Forwarded-Proto <span class="token variable">$scheme</span><span class="token punctuation">;</span>location / <span class="token punctuation">{</span>
+          proxy_pass http://localhost:8081<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span></code><p><code class=" language-bash"><span class="token punctuation">}</span>
+</code></p></pre><p></p><p>Enable the configuration by creating symbolic link:</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">ln</span> -sf /etc/nginx/sites-available/artifactory.conf /etc/nginx/sites-enabled/artifactory.conf
+</code></pre><p>Now restart Nginx</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">service</span> nginx restart
+</code></pre><p>Nginx is read to work as reverse proxy. You will still get error when opening the sites since Artifactory is not ready yet.</p><h3>HTTPS Only Configuration</h3><p>If
+ you already follow the configuration above you can skip this section, 
+but if you want to serve Artifactory only via https port you can  follow
+ this section.</p><p>The configuration below will make Nginx serve both 
+on http port and https port. When a request comes to the http port it 
+will be redirected to https port.</p><p>We assume that you already have an ssl certificate and the private key pair. When using this configuration you need to change <code>server_name</code> ssl_certificate and ssl_certificate_key lines below.</p><p>Before creating the configuration file. Let's create new folder to put ssl certificate.</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">mkdir</span> /etc/nginx/ssl
+</code></pre><p>Create a new configuration file <code>/etc/nginx/sites-available/artifactory-ssl.conf</code> with the content below:</p><pre class=" language-bash"><code class=" language-bash">    server <span class="token punctuation">{</span>
+        listen 80 default_server<span class="token punctuation">;</span>
+        listen <span class="token punctuation">[</span>::<span class="token punctuation">]</span>:80 default_server<span class="token punctuation">;</span><span class="token comment" spellcheck="true"># Redirect all HTTP requests to HTTPS with a 301 Moved Permanently response.</span>
+        <span class="token keyword">return</span> 301 https://<span class="token variable">$host</span><span class="token variable">$request_uri</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>server <span class="token punctuation">{</span>
+        listen 443 ssl http2<span class="token punctuation">;</span>
+        listen <span class="token punctuation">[</span>::<span class="token punctuation">]</span>:443 ssl http2<span class="token punctuation">;</span>server_name artifactory.exampleserver.xyz<span class="token punctuation">;</span>
+        root /usr/share/nginx/artifactory<span class="token punctuation">;</span>proxy_set_header X-Forwarded-For <span class="token variable">$proxy_add_x_forwarded_for</span><span class="token punctuation">;</span>
+        proxy_set_header Host <span class="token variable">$host</span><span class="token punctuation">;</span>
+        proxy_set_header X-Forwarded-Proto <span class="token variable">$scheme</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true"># certs sent to the client in SERVER HELLO are concatenated in ssl_certificate</span>
+        ssl_certificate /etc/nginx/ssl/artifactory.exampleserver.xyz.crt<span class="token punctuation">;</span>
+        ssl_certificate_key /etc/nginx/ssl/artifactory.exampleserver.xyz.key<span class="token punctuation">;</span>ssl_session_timeout 1d<span class="token punctuation">;</span>
+        ssl_session_cache shared:SSL:50m<span class="token punctuation">;</span>
+        ssl_session_tickets off<span class="token punctuation">;</span><span class="token comment" spellcheck="true"># intermediate configuration. tweak to your needs.</span>
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2<span class="token punctuation">;</span>
+        ssl_ciphers <span class="token string">'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS'</span><span class="token punctuation">;</span>
+        ssl_prefer_server_ciphers on<span class="token punctuation">;</span><span class="token comment" spellcheck="true"># HSTS (ngx_http_headers_module is required) (15768000 seconds = 6 months)</span>
+        add_header Strict-Transport-Security max-age<span class="token operator">=</span>15768000<span class="token punctuation">;</span></code><p><code class=" language-bash">location / <span class="token punctuation">{</span>
+          proxy_pass http://localhost:8081<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+</code></p></pre><p></p><p>Enable the site by creating symbolic link using command below:</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">ln</span> -sf /etc/nginx/sites-available/artifactory-ssl.conf /etc/nginx-sites-enabled/artifactory-ssl.conf
+</code></pre><p>Test Nginx configuration using comand below:</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">service</span> nginx configtest
+    nginx: the configuration <span class="token function">file</span> /etc/nginx/nginx.conf syntax is ok
+    nginx: configuration <span class="token function">file</span> /etc/nginx/nginx.conf <span class="token function">test</span> is successful
+</code></pre><p>If the output is different than above, Nginx will show 
+error message and show which file and line of the configuration still 
+not correct.</p><p>Restart Nginx using command below:</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">service</span> nginx restart
+</code></pre><h2>Install JFrog Artifactory</h2><p>Now we are ready to 
+install JFrog Artifactory. Let's add JFrog repository key so apt can 
+verify the packages downloaded from JFrog repository.</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">wget</span> -c -O- <span class="token string">"https://bintray.com/user/downloadSubjectPublicKey?username=jfrog"</span> <span class="token operator">|</span> <span class="token function">sudo</span> apt-key add -
+</code></pre><p>Add JFrog repository to source list file. We put the repository configuration under <code>/etc/apt/sources.list.d/</code> instead of putting the configuration on <code>/etc/apt/sources.list</code> to make it easier to manage the repository.</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token keyword">echo</span> <span class="token string">"deb https://bintray.com/artifact/download/jfrog/artifactory-debs trusty main"</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> -a /etc/apt/sources.list.d/artifactory-oss.list
+</code></pre><p>Update metadata and install JFrog Artifactory OSS.</p><pre class=" language-bash"><code class=" language-bash">    <span class="token function">sudo</span> <span class="token function">apt-get</span> update
+    <span class="token function">sudo</span> <span class="token function">apt-get</span> -y <span class="token function">install</span> jfrog-artifactory-oss 
+</code></pre><h2>Configure JFrog Artifactory Database</h2><p>Even though we already create database and user for Artifactory we will use <code>configure.mysql.sh</code>
+ script that Artifactory provides. This will create MySQL user, create 
+database, and changing contents of Artifactory configuration files.</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> /opt/jfrog/artifactory/bin/configure.mysql.sh<span class="token comment" spellcheck="true">########################################################</span>
+    <span class="token comment" spellcheck="true"># Welcome to the Artifactory MySQL configuration tool! #</span>
+    <span class="token comment" spellcheck="true">########################################################Please enter the MySQL server admin username [root]: root</span></code><p><code class=" language-bash">Please enter the MySQL server admin password:
+</code></p></pre><p></p><p>Enter MySQL <code>root</code> credential.</p><p>Enter username and password of <code>artifactory</code> user that we created earlier.</p><pre class=" language-bash"><code class=" language-bash">    Please enter the Artifactory database username <span class="token punctuation">[</span>artifactory<span class="token punctuation">]</span>:</code><p><code class=" language-bash">Please enter the Artifactory database password <span class="token punctuation">[</span>password<span class="token punctuation">]</span>: 
+    Creating the Artifactory MySQL user and database<span class="token punctuation">..</span>.
+</code></p></pre><p></p><p>We can ignore the warning below. This is because we input the MySQL credentials via the command line.</p><pre class=" language-bash"><code class=" language-bash">    Warning: Using a password on the <span class="token function">command</span> line interface can be insecure.
+    Warning: Using a password on the <span class="token function">command</span> line interface can be insecure.
+</code></pre><p>Now the script will download MySQL JDBC connector. Choose <code>Y</code>, the script will automatically put the downloaded MySQL JDBC connector to /opt/jfrog/artifactory/tomcat/lib</p><pre class=" language-bash"><code class=" language-bash">    No MySQL JDBC connector found. Download or copy one needed.
+    Does the current server has access to the Internet? <span class="token punctuation">[</span>Y/n<span class="token punctuation">]</span>YDownloading mysql-connector-java-5.1.24.jar to /opt/jfrog/artifactory/tomcat/lib<span class="token punctuation">..</span>.</code><p><code class=" language-bash">Configuration completed successfully<span class="token operator">!</span>
+    You can now start up the Artifactory <span class="token function">service</span> to use Artifactory with MySQL.
+    Press enter to exit<span class="token punctuation">..</span>.
+</code></p></pre><p></p><p>Press enter and artifactory is ready to be used.</p><h2>Manually Configure Artifactory Database</h2><p>We can also configure the database manuall without using <code>configure.mysql.sh</code> that Artifactory provides.</p><p>First let's download MySQL JDBC Connector.</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">wget</span> -nv --timeout<span class="token operator">=</span>30 -O /opt/jfrog/artifactory/tomcat/lib/mysql-connector-java-5.1.24.jar http://repo.jfrog.org/artifactory/remote-repos/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar 2<span class="token operator">&gt;</span><span class="token operator">&amp;</span>1
+</code></pre><p>Now open <code>/etc/opt/jfrog/artifactory/storage.properties</code>. On the sample below the database name is artdb and configured as part of <code>url</code>. You can change database name, username and password.</p><pre class=" language-bash"><code class=" language-bash">    type<span class="token operator">=</span>mysql
+    driver<span class="token operator">=</span>com.mysql.jdbc.Driver
+    url<span class="token operator">=</span>jdbc:mysql://localhost:3306/artdb?characterEncoding<span class="token operator">=</span>UTF-8<span class="token operator">&amp;</span>elideSetAutoCommits<span class="token operator">=</span>true
+    username<span class="token operator">=</span>artifactory
+    password<span class="token operator">=</span>verysecret
+</code></pre><h2>Starting Artifactory Service</h2><p>Now we're ready to start Artifactory service. We can use command below:</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">service</span> artifactory start
+</code></pre><p>Artifactory will take some time to start for the first 
+time. You can monitor the startup process by looking at log file. 
+Artifactory log file is located at <code>/opt/jfrog/artifactory/tomcat/logs/catalina.out</code>. I quote some lines below that I found interesting.</p><p>The Artifactory startup process will include creating database schema, default super user <code>admin</code> and also starting the application itself to listen on specific ports. Once we get <code>INFO: Starting ProtocolHandler</code> message, it means the application is ready.</p><pre class=" language-bash"><code class=" language-bash">    INFO: Deploying configuration descriptor /opt/jfrog/artifactory/tomcat/conf/Catalina/localhost/artifactory.xml
+    <span class="token punctuation">[</span>ARTIFACTORY<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO<span class="token punctuation">]</span> Starting Artifactory <span class="token punctuation">[</span>artifactory.home<span class="token operator">=</span>/var/opt/jfrog/artifactory<span class="token punctuation">]</span>.
+    2016-07-07 20:54:17,204 <span class="token punctuation">[</span>art-init<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> <span class="token punctuation">(</span>o.a.w.s.ArtifactoryContextConfigListener:275<span class="token punctuation">)</span> - 
+                    _   _  __           _                      ____   _____ _____
+         /        <span class="token operator">|</span> <span class="token operator">|</span> <span class="token punctuation">(</span>_<span class="token punctuation">)</span>/ _<span class="token operator">|</span>         <span class="token operator">|</span> <span class="token operator">|</span>                    / __  / ____/ ____<span class="token operator">|</span>
+        /     _ __<span class="token operator">|</span> <span class="token operator">|</span>_ _<span class="token operator">|</span> <span class="token operator">|</span>_ __ _  ___<span class="token operator">|</span> <span class="token operator">|</span>_ ___  _ __ _   _  <span class="token operator">|</span> <span class="token operator">|</span>  <span class="token operator">|</span> <span class="token operator">|</span> <span class="token punctuation">(</span>___<span class="token operator">|</span> <span class="token punctuation">(</span>___
+       / /  <span class="token operator">|</span> <span class="token string">'__| __| |  _/ _` |/ __| __/ _ | '</span>__<span class="token operator">|</span> <span class="token operator">|</span> <span class="token operator">|</span> <span class="token operator">|</span> <span class="token operator">|</span> <span class="token operator">|</span>  <span class="token operator">|</span> <span class="token operator">|</span>___ \___ 
+      / ____ <span class="token operator">|</span> <span class="token operator">|</span>  <span class="token operator">|</span> <span class="token operator">|</span>_<span class="token operator">|</span> <span class="token operator">|</span> <span class="token operator">||</span> <span class="token punctuation">(</span>_<span class="token operator">|</span> <span class="token operator">|</span> <span class="token punctuation">(</span>__<span class="token operator">|</span> <span class="token operator">||</span> <span class="token punctuation">(</span>_<span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token operator">|</span>  <span class="token operator">|</span> <span class="token operator">|</span>_<span class="token operator">|</span> <span class="token operator">|</span> <span class="token operator">|</span> <span class="token operator">|</span>__<span class="token operator">|</span> <span class="token operator">|</span>____<span class="token punctuation">)</span> <span class="token operator">|</span>___<span class="token punctuation">)</span> <span class="token operator">|</span>
+     /_/    __<span class="token operator">|</span>   __<span class="token operator">|</span>_<span class="token operator">|</span>_<span class="token operator">|</span> __,_<span class="token operator">|</span>___<span class="token operator">|</span>_____/<span class="token operator">|</span>_<span class="token operator">|</span>   __, <span class="token operator">|</span>  ____/<span class="token operator">|</span>_____/_____/
+     Version:  4.9.0                                   __/ <span class="token operator">|</span>
+     Revision: 40226                                  <span class="token operator">|</span>___/
+     Artifactory Home: <span class="token string">'/var/opt/jfrog/artifactory'</span>2016-07-07 20:54:17,483 <span class="token punctuation">[</span>art-init<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> <span class="token punctuation">(</span>o.a.s.ArtifactoryApplicationContext:207<span class="token punctuation">)</span> - Refreshing Artifactory: startup <span class="token function">date</span> <span class="token punctuation">[</span>Thu Jul 07 20:54:17 EDT 2016<span class="token punctuation">]</span><span class="token punctuation">;</span> root of context hierarchy
+    2016-07-07 20:54:24,706 <span class="token punctuation">[</span>art-init<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> <span class="token punctuation">(</span>o.a.s.d.DbServiceImpl:186<span class="token punctuation">)</span> - Database: MySQL 5.6.30-0ubuntu0.14.04.1. Driver: MySQL-AB JDBC Driver mysql-connector-java-5.1.24 <span class="token punctuation">(</span> Revision: <span class="token variable">${bzr.revision-id}</span> <span class="token punctuation">)</span>
+    2016-07-07 20:54:24,707 <span class="token punctuation">[</span>art-init<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> <span class="token punctuation">(</span>o.a.s.d.DbServiceImpl:188<span class="token punctuation">)</span> - Connection URL: jdbc:mysql://localhost:3306/artdb?characterEncoding<span class="token operator">=</span>UTF-8<span class="token operator">&amp;</span>amp<span class="token punctuation">;</span>elideSetAutoCommits<span class="token operator">=</span>true
+    2016-07-07 20:54:24,794 <span class="token punctuation">[</span>art-init<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> <span class="token punctuation">(</span>o.a.s.d.DbServiceImpl:98<span class="token punctuation">)</span> - ***Creating database schema***
+    <span class="token punctuation">..</span>.
+    2016-07-07 20:54:33,621 <span class="token punctuation">[</span>art-init<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> <span class="token punctuation">(</span>o.a.s.SecurityServiceImpl:2036<span class="token punctuation">)</span> - Creating the default super user <span class="token string">'admin'</span>, since no admin user exists<span class="token operator">!</span>
+    2016-07-07 20:54:33,644 <span class="token punctuation">[</span>art-init<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> <span class="token punctuation">(</span>o.a.s.SecurityServiceImpl:2063<span class="token punctuation">)</span> - Creating the default anonymous user, since it does not exists<span class="token operator">!</span>
+    2016-07-07 20:54:33,705 <span class="token punctuation">[</span>art-init<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> <span class="token punctuation">(</span>o.a.s.ArtifactoryApplicationContext:219<span class="token punctuation">)</span> - Initializing org.artifactory.storage.binary.BinaryStoreManagerService
+    2016-07-07 20:54:33,777 <span class="token punctuation">[</span>art-init<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> <span class="token punctuation">(</span>o.a.s.ArtifactoryApplicationContext:404<span class="token punctuation">)</span> - Artifactory application context is ready.
+    2016-07-07 20:54:33,781 <span class="token punctuation">[</span>art-init<span class="token punctuation">]</span> <span class="token punctuation">[</span>INFO <span class="token punctuation">]</span> <span class="token punctuation">(</span>o.a.w.s.ArtifactoryContextConfigListener:221<span class="token punctuation">)</span> - 
+    <span class="token comment" spellcheck="true">###########################################################</span>
+    <span class="token comment" spellcheck="true">### Artifactory successfully started (16.585 seconds)   ###</span>
+    <span class="token comment" spellcheck="true">###########################################################Jul 07, 2016 8:56:15 PM org.apache.catalina.startup.HostConfig deployDescriptor</span>
+    INFO: Deployment of configuration descriptor /opt/jfrog/artifactory/tomcat/conf/Catalina/localhost/artifactory.xml has finished <span class="token keyword">in</span> 124,179 ms
+    Jul 07, 2016 8:56:16 PM org.apache.catalina.startup.HostConfig deployDirectory
+    INFO: Deploying web application directory /opt/jfrog/artifactory/tomcat/webapps/ROOT
+    Jul 07, 2016 8:56:16 PM org.apache.catalina.startup.HostConfig deployDirectory
+    INFO: Deployment of web application directory /opt/jfrog/artifactory/tomcat/webapps/ROOT has finished <span class="token keyword">in</span> 112 ms
+    Jul 07, 2016 8:56:16 PM org.apache.coyote.AbstractProtocol start
+    INFO: Starting ProtocolHandler <span class="token punctuation">[</span><span class="token string">"http-nio-8081"</span><span class="token punctuation">]</span>
+    Jul 07, 2016 8:56:16 PM org.apache.coyote.AbstractProtocol start
+    INFO: Starting ProtocolHandler <span class="token punctuation">[</span><span class="token string">"ajp-nio-8019"</span><span class="token punctuation">]</span></code></pre><p>To check Artifactory service status you can use two commands below:</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">service</span> artifactory status
+    Artifactory Tomcat running
+</code></pre><p>or</p><pre class=" language-bash"><code class=" language-bash">    $ <span class="token function">sudo</span> <span class="token function">service</span> artifactory check 
+    Artifactory is running, on pid<span class="token operator">=</span>9448
+</code></pre><h2>Accessing Artifactory</h2><p>Now point your browser to Artifactory address. Artifactory will prompt us to login. Artifactory default <code>admin</code> username and password is <code>admin</code> / <code>password</code></p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/442270098.png" alt=""><p>The main dashboard shows features supported by Artifactory. Some integration show <strong>Not Available</strong> which means it's not supported on OSS version.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/383867441.png" alt=""><h2>Change Artifactory Admin Password</h2><p>Click on <strong>Admin</strong> username on top right of dashboard. We will be asked our current password before we can change the password.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/1596731843.png" alt=""><p>We
+ can change default admin password to new password. If we use password 
+manager it's likely that our password manager can generate random 
+password.</p><p>We can also generate random password using <a href="https://www.grc.com/passwords.htm">GRC's Ultra High Security Password Generator</a></p><p>Make sure that our password contain both upper case and lower case, number, and special charaters. Click <strong>Save</strong> after changing the password.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/2068469461.png" alt=""><p>Password successfully updated.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/2040483477.png" alt=""><h2>Accessing System Info</h2><p>We can access System Info from sidebar menu  <strong>Admin</strong> -&gt; <strong>Advanced</strong> -&gt; <strong>System Info</strong></p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/898618568.png" alt=""><h2>Accessing System Logs</h2><p>We can access System Logs from sidebar menu  <strong>Admin</strong> -&gt; <strong>Advanced</strong> -&gt; <strong>System Logs</strong></p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/1730651021.png" alt=""><h2>Artifactory Maintenance Configuration</h2><p>We can access the Artifactory maintenance configuration from sidebar menu  <strong>Admin</strong> -&gt; <strong>Advanced</strong> -&gt; <strong>Maintenance</strong>.
+ In this page we can configure garbage collection schedule, storage 
+quota, cleanup unused cached artifacts and also clean up virtual 
+repositories.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/1370601848.png" alt=""><p>We can also clean up storage by compress internal database and prune unreferenced data.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/1040436801.png" alt=""><h2>Artifactory Storage Summary</h2><p>We can access Artifactory storage summary from sidebar menu  <strong>Admin</strong> -&gt; <strong>Advanced</strong> -&gt; <strong>Storage</strong>.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/1819550681.png" alt=""><h2>Backup Management</h2><p>We can access Artifactory backup management from sidebar menu  <strong>Admin</strong> -&gt; <strong>Serices</strong> -&gt; <strong>Backups</strong>.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/190699859.png" alt=""><h2>Artifactory General Configuration</h2><p>We can access Artifactory backup management from sidebar menu  <strong>Admin</strong> -&gt; <strong>Configuration</strong> -&gt; <strong>General</strong>.</p><p>In this page we can set server name, custom base url, max size for file upload and also date format.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/730355538.png" alt=""><h2>Setting Artifactory Custom Message</h2><p>We
+ can create custom message for our users. The setting is still located 
+on General configuration page. We can input title and the message itself
+ and also title color.</p><p>Choose whether to put the custom message on all pages or only on the home page. Don't forget to click <strong>Save</strong> after creating custom message.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/668285816.png" alt=""><p>The new custom message is shown on the top of the page below header.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/2080070372.png" alt=""><h2>Proxy Management</h2><p>We
+ can set Artifactory to use a proxy. This can be useful if we are on 
+strict network where outgoing traffic is limited and we have to use 
+proxy to access the internet. To add new proxy, click <strong>New</strong> on top right of the form.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/117511981.png" alt=""><p>Input detail of our proxy. We can also use authenticated proxy by supplying username and password.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/3808.png" alt=""><p>New proxy listed on the page.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/2029020779.png" alt=""><h2>Mail Configuration</h2><p>We can access Artifactory mail configuration from sidebar menu  <strong>Admin</strong> -&gt; <strong>Configuration</strong> -&gt; <strong>Mail</strong>. We can use any mail server available, either locally installed mail server or third party service like Amazon SES or SendGrid.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/365081693.png" alt=""><h2>User Management</h2><p>We can access Artifactory user management from sidebar menu  <strong>Admin</strong> -&gt; <strong>Security</strong> -&gt; <strong>Users</strong>.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/348039292.png" alt=""><p>This page list all user available on the system. Click <strong>New</strong> on top right to create new user.</p><p>Add detail for the new user, we can give admin or non-admin privileges.</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/878351749.png" alt=""><p>Set the password</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/1353063085.png" alt=""><p>And assign the user to specific group(s).</p><img class="img-responsive center-block" src="1.Install-JFrog-Artifactory_files/2065931344.png" alt=""><h2>Summary</h2><p>In
+ this tutorial we learned how-to install JFrog Artifactory on Ubuntu 
+Server 14.04. We used MySQL as database and Nginx as reverse proxy for 
+Artifactory. We also learn the basic usage of Artifactory.</p><p>Hopefully using Artifactory can help your team to increase productivity.</p>						</article>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="main">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-8">
+						<hr>
+						<div class="article-social">
+							<span class="author-avatar hidden-xs">
+								<img src="1.Install-JFrog-Artifactory_files/ee7136d39118c02b186942d6f64c2696.jpeg" class="img-circle">
+							</span>
+							<span class="author-name"><a href="https://hostpresto.com/author/muhammadp/" title="Posts by Muhammad Panji" rel="author">Muhammad Panji</a></span>
+							<span class="share"><!-- Simple Share Buttons Adder (6.3.4) simplesharebuttons.com --><div class="ssba ssba-wrap"><div style="text-align:left"><a data-site="" class="ssba_facebook_share" href="http://www.facebook.com/sharer.php?u=https://hostpresto.com/community/tutorials/how-to-install-jfrog-artifactory-on-ubuntu-14-04/" target="_blank"><img src="1.Install-JFrog-Artifactory_files/facebook.png" title="Facebook" class="ssba ssba-img" alt="Share on Facebook"></a><span class="ssba_sharecount">0</span><a data-site="" class="ssba_twitter_share" href="http://twitter.com/share?url=https://hostpresto.com/community/tutorials/how-to-install-jfrog-artifactory-on-ubuntu-14-04/&amp;text=How-to+Install+JFrog+Artifactory+on+Ubuntu+14.04+" target="_blank"><img src="1.Install-JFrog-Artifactory_files/twitter.png" title="Twitter" class="ssba ssba-img" alt="Tweet about this on Twitter"></a><a data-site="reddit" class="ssba_reddit_share" href="http://reddit.com/submit?url=https://hostpresto.com/community/tutorials/how-to-install-jfrog-artifactory-on-ubuntu-14-04/&amp;title=How-to%20Install%20JFrog%20Artifactory%20on%20Ubuntu%2014.04" target="_blank"><img src="1.Install-JFrog-Artifactory_files/reddit.png" title="Reddit" class="ssba ssba-img" alt="Share on Reddit"></a><span class="ssba_sharecount">0</span><a data-site="stumbleupon" class="ssba_stumbleupon_share ssba_share_link" href="http://www.stumbleupon.com/submit?url=https://hostpresto.com/community/tutorials/how-to-install-jfrog-artifactory-on-ubuntu-14-04/&amp;title=How-to%20Install%20JFrog%20Artifactory%20on%20Ubuntu%2014.04" target="_blank"><img src="1.Install-JFrog-Artifactory_files/stumbleupon.png" title="StumbleUpon" class="ssba ssba-img" alt="Share on StumbleUpon"></a><span class="ssba_sharecount">64</span></div></div></span>
+						</div>
+						<hr>
+						<div class="yarpp-related">
+
+<div class="related-posts">
+    <h3>Related Posts</h3>
+    <div class="row">
+                    <div class="col-sm-3">
+        		<a href="https://hostpresto.com/community/tutorials/how-to-create-a-repository-manager-with-apache-archiva-on-ubuntu-14-04/" rel="bookmark" title="How To Create a Repository Manager With Apache Archiva On Ubuntu 14.04">
+                    <div class="thumbnail">
+                                                <img src="1.Install-JFrog-Artifactory_files/stars-blue.svg" class="img-responsive">
+                    </div>
+                    </a><a class="" href="https://hostpresto.com/community/tutorials/how-to-create-a-repository-manager-with-apache-archiva-on-ubuntu-14-04/" rel="bookmark" title="How To Create a Repository Manager With Apache Archiva On Ubuntu 14.04">How To Create a Repository Manager With Apache Archiva On Ubuntu 14.04</a>
+                
+            </div>
+    	            <div class="col-sm-3">
+        		<a href="https://hostpresto.com/community/tutorials/how-to-install-and-configure-apache-tomcat-7-on-ubuntu-14-04/" rel="bookmark" title="How to Install and Configure Apache Tomcat 7 on Ubuntu 14.04">
+                    <div class="thumbnail">
+                                                <img src="1.Install-JFrog-Artifactory_files/stars-blue.svg" class="img-responsive">
+                    </div>
+                    </a><a class="" href="https://hostpresto.com/community/tutorials/how-to-install-and-configure-apache-tomcat-7-on-ubuntu-14-04/" rel="bookmark" title="How to Install and Configure Apache Tomcat 7 on Ubuntu 14.04">How to Install and Configure Apache Tomcat 7 on Ubuntu 14.04</a>
+                
+            </div>
+    	            <div class="col-sm-3">
+        		<a href="https://hostpresto.com/community/tutorials/how-to-install-and-configure-apache-tomcat-8-on-ubuntu-15-10/" rel="bookmark" title="How to Install And Configure Apache Tomcat 8 on Ubuntu 15.10">
+                    <div class="thumbnail">
+                                                <img src="1.Install-JFrog-Artifactory_files/stars-blue.svg" class="img-responsive">
+                    </div>
+                    </a><a class="" href="https://hostpresto.com/community/tutorials/how-to-install-and-configure-apache-tomcat-8-on-ubuntu-15-10/" rel="bookmark" title="How to Install And Configure Apache Tomcat 8 on Ubuntu 15.10">How to Install And Configure Apache Tomcat 8 on Ubuntu 15.10</a>
+                
+            </div>
+    	            <div class="col-sm-3">
+        		<a href="https://hostpresto.com/community/tutorials/how-to-install-jetty-8-on-ubuntu-14-04/" rel="bookmark" title="How to Install Jetty 8 on Ubuntu 14.04">
+                    <div class="thumbnail">
+                                                <img src="1.Install-JFrog-Artifactory_files/stars-blue.svg" class="img-responsive">
+                    </div>
+                    </a><a class="" href="https://hostpresto.com/community/tutorials/how-to-install-jetty-8-on-ubuntu-14-04/" rel="bookmark" title="How to Install Jetty 8 on Ubuntu 14.04">How to Install Jetty 8 on Ubuntu 14.04</a>
+                
+            </div>
+    	    </div>
+</div>
+</div>
+
+						<div class="article-comments">
+							<h3>Comments</h3>
+							
+<div id="disqus_thread"><iframe id="dsq-app1" name="dsq-app1" allowtransparency="true" scrolling="no" tabindex="0" title="Disqus" style="width: 1px ! important; min-width: 100% ! important; border: medium none ! important; overflow: hidden ! important; height: 614px ! important;" src="1.Install-JFrog-Artifactory_files/a.html" horizontalscrolling="no" verticalscrolling="no" frameborder="0" width="100%"></iframe></div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+				<footer>
+			<div class="container">
+				<div class="col-sm-4 footer-about">
+					<img src="1.Install-JFrog-Artifactory_files/logo-white-blue.svg">
+					<div class="footer-text">
+						HostPresto! Were known as Dream Hosting (dream-hosting.co.uk) until June 2014
+					</div>
+					<div class="footer-social">
+					<a href="http://facebook.com/hostpresto"><img src="1.Install-JFrog-Artifactory_files/facebook-2.svg" class="img-responsive"></a>
+					<a href="http://twitter.com/hostpresto"><img src="1.Install-JFrog-Artifactory_files/twitter.svg" class="img-responsive"></a>
+					<a href="https://plus.google.com/115779370025107400860"><img src="1.Install-JFrog-Artifactory_files/google-plus.svg" class="img-responsive"></a>
+					</div>
+					<div class="footer-copyright">
+						© HostPresto 2016 All Rights Reserved
+					</div>
+				</div>
+				<div class="col-sm-4 footer-nav">
+					<div class="row">
+						<div class="col-sm-6">
+							<h6>Account &amp; Help</h6>
+							<nav>
+							 	<a href="https://hostpresto.com/my/">My HostPresto</a>
+								<a href="https://hostpresto.com/help/">Help</a>
+								<a href="https://hostpresto.com/community/">Community</a>
+								<a href="https://hostpresto.com/contact/">Contact</a>
+							</nav>
+							<h6 style="margin-top: 30px">Company</h6>
+							<nav>
+								<a href="https://hostpresto.com/about/">About</a>
+								<a href="https://hostpresto.com/articles/">Articles</a>
+								<a href="https://hostpresto.com/blog/">Blog</a>
+								<a href="https://hostpresto.com/terms/">Terms</a>
+								<a href="https://hostpresto.com/privacy-policy/">Privacy Policy</a>
+							</nav>
+						</div>
+						<div class="col-sm-6">
+							<h6>Services</h6>
+							<nav>
+								<a href="https://hostpresto.com/web-hosting/">Web Hosting</a>
+								<a href="https://hostpresto.com/apps/wordpress-hosting/">Wordpress Hosting</a>
+								<a href="https://hostpresto.com/apps/magento-hosting/">Magento Hosting</a>
+								<a href="https://hostpresto.com/reseller-hosting/">Reseller Hosting</a>
+								<a href="https://hostpresto.com/domain-names/">Domain Names</a>
+								<a href="https://hostpresto.com/cloud-servers/">Cloud Servers</a>
+								<a href="https://hostpresto.com/email-hosting/">Email Hosting</a>
+								<a href="https://hostpresto.com/apps/">Hosted Apps</a>
+								<a href="https://hostpresto.com/ssl-certificates/">SSL Certificates</a>
+								<a href="https://hostpresto.com/cpanel-hosting/">cPanel Hosting</a>
+								<a href="https://hostpresto.com/website-builder/">Website Builder</a>
+							</nav>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-4 footer-things">
+					<h6>Things of Interest</h6>
+															<div class="footer-article-list-item">
+						<div class="footer-article-list-date">
+							29th May 2017						</div>
+						<div class="footer-article-list-title">
+							<a href="https://hostpresto.com/community/tutorials/how-to-install-getsimple-cms-on-ubuntu-14-04/">How to Install GetSimple CMS on Ubuntu 14.04</a>
+						</div>
+					</div>
+					<hr>
+										<div class="footer-article-list-item">
+						<div class="footer-article-list-date">
+							29th May 2017						</div>
+						<div class="footer-article-list-title">
+							<a href="https://hostpresto.com/community/tutorials/how-to-install-forma-lms-on-ubuntu-14-04/">How to Install Forma LMS on Ubuntu 14.04</a>
+						</div>
+					</div>
+					<hr>
+										<div class="footer-article-list-item">
+						<div class="footer-article-list-date">
+							29th May 2017						</div>
+						<div class="footer-article-list-title">
+							<a href="https://hostpresto.com/community/tutorials/how-to-install-flatpress-on-ubuntu-14-04/">How to Install FlatPress on Ubuntu 14.04</a>
+						</div>
+					</div>
+					<hr>
+									</div>
+			</div>
+		</footer>
+		<nav class="sidemenu" id="sidemenu">
+			<a href="https://hostpresto.com/web-hosting/">
+				Web Hosting
+				<span>Fast, reliable and cloud hosted</span>
+			</a>
+			<a href="https://hostpresto.com/apps/wordpress-hosting/">
+				Wordpress Hosting
+				<span>Blazing fast optimised and fully compatible</span>
+			</a>
+			<a href="https://hostpresto.com/reseller-hosting/">
+				Reseller Hosting
+				<span>Host many sites under a white label</span>
+			</a>
+			<a href="https://hostpresto.com/email-hosting/">
+				Email Hosting
+				<span>Robust enterprise grade email hosting</span>
+			</a>
+
+			<a href="https://hostpresto.com/domain-names/">
+				Domain Names
+				<span>Hundreds of extensions to choose from</span>
+			</a>
+
+			<div href="" class="multi">
+				Cloud Servers <div class="triangle-arrow triangle-arrow-white triangle-arrow-right"></div>
+				<div class="inner">
+					<a href="https://hostpresto.com/cloud-servers/cpanel-cloud-servers/">
+						cPanelCloud
+						<span>Want a server but no hassle? This is for you</span>
+					</a>
+					<a href="https://hostpresto.com/cloud-servers/managed-cloud-servers/">
+						ManagedCloud
+						<span>High end, bespoke setups for enterprise</span>
+					</a>
+					<a href="https://hostpresto.com/cloud-servers/unmanaged-cloud-servers/">
+						UnmanagedCloud
+						<span>Top spec, cheap, for people in the know</span>
+					</a>
+					<a href="#" class="back">
+						<div class="triangle-arrow triangle-arrow-white triangle-arrow-left"></div> Back
+					</a>
+				</div>
+			</div>
+			<div href="" class="multi">
+				Hosted Apps <div class="triangle-arrow triangle-arrow-white triangle-arrow-right"></div>
+				<div class="inner">
+					<a href="https://hostpresto.com/apps/wordpress-hosting/">
+						Wordpress
+						<span>Blazing fast optimised and fully compatible</span>
+					</a>
+					<a href="https://hostpresto.com/apps/magento-hosting/">
+						Magento
+						<span>Fully optimised Magento hosting</span>
+					</a>
+					<a href="https://hostpresto.com/apps/joomla-hosting/">
+						Joomla
+						<span>Joomla pre-installed and ready to go</span>
+					</a>
+					<a href="https://hostpresto.com/apps/prestashop-hosting/">
+						PrestaShop
+						<span>Pre-isntalled and ready to go</span>
+					</a>
+					<a href="https://hostpresto.com/apps/drupal-hosting/">
+						Drupal
+						<span>Pre-isntalled and ready to go</span>
+					</a>
+					<a href="https://hostpresto.com/apps/opencart-hosting/">
+						OpenCart
+						<span>Pre-isntalled and ready to go</span>
+					</a>
+					<a href="https://hostpresto.com/apps/">
+						View All
+						<span>View all of our hosted apps</span>
+					</a>
+					<a href="" class="back">
+						<div class="triangle-arrow triangle-arrow-white triangle-arrow-left"></div> Back
+					</a>
+				</div>
+			</div>
+			<div href="" class="multi">
+				Other Services <div class="triangle-arrow triangle-arrow-white triangle-arrow-right"></div>
+				<div class="inner">
+					<a href="https://hostpresto.com/ssl-certificates/">
+						SSL Certificates
+						<span>Get secure and gain customer confidence</span>
+					</a>
+					<a href="https://hostpresto.com/web-hosting/migrating/">
+						Migration Service
+						<span>Something longer here would be ideal to</span>
+					</a>
+					<a href="https://hostpresto.com/website-builder/">
+						Website Builder
+						<span>Drag &amp; Drop website builder for complete novices</span>
+					</a>
+					<a href="https://hostpresto.com/cpanel-hosting/">
+						cPanel Hosting
+						<span>The best cPanel hosting you'll find</span>
+					</a>
+					<a href="https://hostpresto.com/php-hosting/">
+						PHP Hosting
+						<span>Blazing fast PHP 4 to 7 hosting</span>
+					</a>
+					<a href="https://hostpresto.com/django-hosting/">
+						Django Hosting
+						<span>Easy to use gui with module installer</span>
+					</a>
+					<a href="https://hostpresto.com/docker-hosting/">
+						Docker Hosting
+						<span>Flexible and scalable container hosting</span>
+					</a>
+					<a href="" class="back">
+						<div class="triangle-arrow triangle-arrow-white triangle-arrow-left"></div> Back
+					</a>
+				</div>
+			</div>
+			<div href="" class="multi">
+				Account &amp; Help <div class="triangle-arrow triangle-arrow-white triangle-arrow-right"></div>
+				<div class="inner">
+					<a href="https://hostpresto.com/my/">
+						My HostPresto
+						<span>Already a customer? Login here!</span>
+					</a>
+					<a href="https://hostpresto.com/help/">
+						Help Centre
+						<span>Easy to follow guides to cover almost everything</span>
+					</a>
+					<a href="https://hostpresto.com/community/">
+						Community
+						<span>See our community tutorials and Q&amp;A</span>
+					</a>
+					<a href="https://hostpresto.com/contact/">
+						Contact
+						<span>Drop us an email, we love to talk</span>
+					</a>
+					<a href="" class="back">
+						<div class="triangle-arrow triangle-arrow-white triangle-arrow-left"></div> Back
+					</a>
+				</div>
+			</div>
+		</nav>
+		
+		<script type="text/javascript">
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"platform":"wordpress@4.7.2","language":""},"disqusIdentifier":"3337 https:\/\/hostpresto.com\/uncategorized\/how-to-install-jfrog-artifactory-on-ubuntu-14-04\/","disqusShortname":"hostpresto","disqusTitle":"How-to Install JFrog Artifactory on Ubuntu 14.04","disqusUrl":"https:\/\/hostpresto.com\/community\/tutorials\/how-to-install-jfrog-artifactory-on-ubuntu-14-04\/","options":{"manualSync":false},"postId":"3337"};
+/* ]]> */
+</script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"hostpresto"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="1.Install-JFrog-Artifactory_files/a_002"></script>
+
+		<!-- analytics -->
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		  ga('create', 'UA-3928646-1', 'auto');
+		  ga('send', 'pageview');
+
+		</script>
+		<!-- Google Code for Remarketing Tag -->
+		<script type="text/javascript">
+		/* <![CDATA[ */
+		var google_conversion_id = 999033393;
+		var google_custom_params = window.google_tag_params;
+		var google_remarketing_only = true;
+		/* ]]> */
+		</script>
+		<script type="text/javascript" src="1.Install-JFrog-Artifactory_files/conversion.js">
+		</script><iframe name="google_conversion_frame" title="Google conversion frame" src="https://googleads.g.doubleclick.net/pagead/viewthroughconversion/999033393/?random=1496128517996&amp;cv=8&amp;fst=1496128517996&amp;num=1&amp;fmt=1&amp;guid=ON&amp;u_h=768&amp;u_w=1366&amp;u_ah=743&amp;u_aw=1366&amp;u_cd=24&amp;u_his=1&amp;u_tz=330&amp;u_java=false&amp;u_nplug=1&amp;u_nmime=2&amp;frm=0&amp;url=https%3A%2F%2Fhostpresto.com%2Fcommunity%2Ftutorials%2Fhow-to-install-jfrog-artifactory-on-ubuntu-14-04%2F&amp;ref=https%3A%2F%2Fwww.google.co.in%2F&amp;tiba=How-to%20Install%20JFrog%20Artifactory%20on%20Ubuntu%2014.04" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" height="13" frameborder="0" width="300"></iframe>
+		<noscript>
+		<div style="display:inline;">
+		<img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/999033393/?guid=ON&amp;script=0"/>
+		</div>
+		</noscript>
+
+		<!-- Facebook Pixel Code -->
+		<script>
+		!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+		n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+		n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+		t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+		document,'script','https://connect.facebook.net/en_US/fbevents.js');
+		fbq('init', '1543355772627886'); // Insert your pixel ID here.
+		fbq('track', 'PageView');
+		</script>
+		<noscript><img height="1" width="1" style="display:none"
+		src="https://www.facebook.com/tr?id=1543355772627886&ev=PageView&noscript=1"
+		/></noscript>
+		<!-- End Facebook Pixel Code -->
+
+			
+
+<div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_https" allowtransparency="true" allowfullscreen="true" scrolling="no" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" style="border: medium none;" src="1.Install-JFrog-Artifactory_files/0F7S7QWJ0Ac.html" frameborder="0"></iframe></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div></div></div></div><iframe style="display: none;"></iframe></body></html>

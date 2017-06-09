@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)]><!-->
+<html lang="en"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>Setting up a Maven Repository Manager with Artifactory | RedStack</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="stylesheet" type="text/css" media="all" href="4%28a%29.client-side_files/style_002.css">
+<link rel="pingback" href="https://redstack.wordpress.com/xmlrpc.php">
+<link rel="dns-prefetch" href="https://s2.wp.com/">
+<link rel="dns-prefetch" href="https://s1.wp.com/">
+<link rel="dns-prefetch" href="https://s0.wp.com/">
+<link rel="alternate" type="application/rss+xml" title="RedStack » Feed" href="https://redstack.wordpress.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="RedStack » Comments Feed" href="https://redstack.wordpress.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="RedStack » Setting up a Maven Repository Manager with&nbsp;Artifactory Comments Feed" href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/feed/">
+	<script defer="defer" src="4%28a%29.client-side_files/beacon.js"></script><script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+			<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/s1.wp.com\/wp-includes\/js\/wp-emoji-release.min.js?m=1488818651h&ver=4.7.5"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="4%28a%29.client-side_files/wp-emoji-release.js" type="text/javascript" defer="defer"></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="all-css-0-1" href="4%28a%29.client-side_files/a.css" type="text/css" media="all">
+<script type="text/javascript">
+/* <![CDATA[ */
+var related_posts_js_options = {"post_heading":"h4"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="4%28a%29.client-side_files/a_003"></script>
+<link rel="stylesheet" id="all-css-0-2" href="4%28a%29.client-side_files/style.css" type="text/css" media="all">
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='highlander-comments-ie7-css'  href='https://s1.wp.com/wp-content/mu-plugins/highlander-comments/style-ie7.css?m=1351637563h&#038;ver=20110606' type='text/css' media='all' />
+<![endif]-->
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://redstack.wordpress.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://s1.wp.com/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="Writing a Robot Remote&nbsp;Library" href="https://redstack.wordpress.com/2013/10/22/writing-a-robot-remote-library/">
+<link rel="next" title="Doing more with the WebLogic Maven Plugin (Robot, Selenium and Sonar&nbsp;too!)" href="https://redstack.wordpress.com/2013/12/10/doing-more-with-the-weblogic-maven-plugin-robot-selenium-and-sonar-too/">
+<meta name="generator" content="WordPress.com">
+<link rel="canonical" href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/">
+<link rel="shortlink" href="http://wp.me/pgVeO-MF">
+<link rel="alternate" type="application/json+oembed" href="https://public-api.wordpress.com/oembed/1.0/?format=json&amp;url=https%3A%2F%2Fredstack.wordpress.com%2F2013%2F12%2F04%2Fsetting-up-a-maven-repository-manager-with-artifactory%2F&amp;for=wpcom-auto-discovery"><link rel="alternate" type="application/xml+oembed" href="https://public-api.wordpress.com/oembed/1.0/?format=xml&amp;url=https%3A%2F%2Fredstack.wordpress.com%2F2013%2F12%2F04%2Fsetting-up-a-maven-repository-manager-with-artifactory%2F&amp;for=wpcom-auto-discovery">
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Setting up a Maven Repository Manager with Artifactory">
+<meta property="og:url" content="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/">
+<meta property="og:description" content="As you start to work more with Maven, you will undoubtedly reach the point where you feel the need for a repository manager – something that manages all of your repositories of artifacts for …">
+<meta property="article:published_time" content="2013-12-04T11:06:44+00:00">
+<meta property="article:modified_time" content="2013-12-04T11:06:44+00:00">
+<meta property="og:site_name" content="RedStack">
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:site" content="@markxnelson">
+<meta name="twitter:text:title" content="Setting up a Maven Repository Manager with&nbsp;Artifactory">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@markxnelson">
+<meta property="fb:app_id" content="249643311490">
+<meta property="article:publisher" content="https://www.facebook.com/WordPresscom">
+<link rel="shortcut icon" type="image/x-icon" href="https://s2.wp.com/i/favicon.ico" sizes="16x16 24x24 32x32 48x48">
+<link rel="icon" type="image/x-icon" href="https://s2.wp.com/i/favicon.ico" sizes="16x16 24x24 32x32 48x48">
+<link rel="apple-touch-icon-precomposed" href="https://s0.wp.com/i/webclip.png">
+<link rel="openid.server" href="https://redstack.wordpress.com/?openidserver=1">
+<link rel="openid.delegate" href="https://redstack.wordpress.com/">
+<link rel="search" type="application/opensearchdescription+xml" href="https://redstack.wordpress.com/osd.xml" title="RedStack">
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com">
+<meta name="application-name" content="RedStack"><meta name="msapplication-window" content="width=device-width;height=device-height"><meta name="msapplication-tooltip" content="Musings on Integration with Oracle Fusion Middleware"><meta name="msapplication-task" content="name=Subscribe;action-uri=https://redstack.wordpress.com/feed/;icon-uri=https://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=Sign up for a free blog;action-uri=http://wordpress.com/signup/;icon-uri=https://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=WordPress.com Support;action-uri=http://support.wordpress.com/;icon-uri=https://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=WordPress.com Forums;action-uri=http://forums.wordpress.com/;icon-uri=https://s2.wp.com/i/favicon.ico"><meta name="title" content="Setting up a Maven Repository Manager with&nbsp;Artifactory | RedStack on WordPress.com">
+<meta name="description" content="As you start to work more with Maven, you will undoubtedly reach the point where you feel the need for a repository manager - something that manages all of your repositories of artifacts for you.&nbsp; You will likely have a few repositories for different types of artifacts that you care about. There are a few…">
+<link rel="amphtml" href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/amp/"><link rel="stylesheet" type="text/css" href="4%28a%29.client-side_files/shCore.css"><link rel="stylesheet" type="text/css" href="4%28a%29.client-side_files/shThemeDefault.css"><style type="text/css" id="syntaxhighlighteranchor"></style>
+</head>
+
+<body class="post-template-default single single-post postid-3017 single-format-standard mp6 customizer-styles-applied highlander-enabled highlander-light">
+<div id="wrapper" class="hfeed">
+	<div id="header">
+		<div id="masthead">
+			<div id="branding" role="banner">
+								<div id="site-title">
+					<span>
+						<a href="https://redstack.wordpress.com/" title="RedStack" rel="home">RedStack</a>
+					</span>
+				</div>
+				<div id="site-description">Musings on Integration with Oracle Fusion Middleware</div>
+
+										<a class="home-link" href="https://redstack.wordpress.com/" title="RedStack" rel="home">
+							<img src="4%28a%29.client-side_files/cropped-china-house.jpg" alt="" height="198" width="940">
+						</a>
+								</div><!-- #branding -->
+
+			<div id="access" role="navigation">
+			  				<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+								<div class="menu-header"><ul id="menu-menu-1" class="menu"><li id="menu-item-2995" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-2995"><a href="https://redstack.wordpress.com/">Home</a></li>
+<li id="menu-item-2997" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-2997"><a href="https://redstack.wordpress.com/bpm/">BPM</a>
+<ul class="sub-menu">
+	<li id="menu-item-2998" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2998"><a href="https://redstack.wordpress.com/bpm/bpm-10g/">BPM 10g</a></li>
+	<li id="menu-item-2999" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2999"><a href="https://redstack.wordpress.com/bpm/bpm-11g/">BPM 11g</a></li>
+</ul>
+</li>
+<li id="menu-item-3000" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3000"><a href="https://redstack.wordpress.com/continuous-integration/">DevOps</a></li>
+<li id="menu-item-3002" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3002"><a href="https://redstack.wordpress.com/soa/">SOA SDLC</a></li>
+<li id="menu-item-3003" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-3003"><a href="https://redstack.wordpress.com/worklist/">Worklist</a>
+<ul class="sub-menu">
+	<li id="menu-item-3004" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3004"><a href="https://redstack.wordpress.com/worklist/in-net/">in .Net</a></li>
+</ul>
+</li>
+<li id="menu-item-3005" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3005"><a href="https://redstack.wordpress.com/about/">About</a></li>
+</ul></div>			</div><!-- #access -->
+		</div><!-- #masthead -->
+	</div><!-- #header -->
+
+	<div id="main">
+
+		<div id="container">
+			<div id="content" role="main">
+
+			
+
+				<div id="nav-above" class="navigation">
+					<div class="nav-previous"><a href="https://redstack.wordpress.com/2013/10/22/writing-a-robot-remote-library/" rel="prev"><span class="meta-nav">←</span> Writing a Robot Remote&nbsp;Library</a></div>
+					<div class="nav-next"><a href="https://redstack.wordpress.com/2013/12/10/doing-more-with-the-weblogic-maven-plugin-robot-selenium-and-sonar-too/" rel="next">Doing more with the WebLogic Maven Plugin (Robot, Selenium and Sonar&nbsp;too!) <span class="meta-nav">→</span></a></div>
+				</div><!-- #nav-above -->
+
+				<div id="post-3017" class="post-3017 post type-post status-publish format-standard hentry category-uncategorized tag-artifactory tag-maven tag-repository">
+											<h2 class="entry-title"><a href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/" rel="bookmark">Setting up a Maven Repository Manager with&nbsp;Artifactory</a></h2>					
+					<div class="entry-meta">
+						<span class="meta-prep meta-prep-author">Posted on</span> <a href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/" title="9:06 pm" rel="bookmark"><span class="entry-date">December 4, 2013</span></a>						<span class="by-author"><span class="sep">by</span> <span class="author vcard"><a class="url fn n" href="https://redstack.wordpress.com/author/markxnelson/" title="View all posts by Mark Nelson" rel="author">Mark Nelson</a></span> </span>					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p>As you start to work more with Maven, you will undoubtedly 
+reach the point where you feel the need for a repository manager – 
+something that manages all of your repositories of artifacts for 
+you.&nbsp; You will likely have a few repositories for different types 
+of artifacts that you care about.</p>
+<p>There are a few repository managers out there, with varying 
+capabilities, and some with commercial and free/community 
+versions.&nbsp; In this post, we will use the community version of 
+Artifactory from JFrog.</p>
+<p>So the scenario here is that we are going to set up a binary repository to do three things:</p>
+<ul>
+<li>act as a mirror/proxy of Maven Central</li>
+<li>hold our work in progress project builds (snapshots)</li>
+<li>hold our finished products and other dependencies</li>
+</ul>
+<p>We will set up Artifactory with three repositories for these three uses, named:</p>
+<ul>
+<li>repo1</li>
+<li>snapshot</li>
+<li>internal</li>
+</ul>
+<p>Let’s get started by downloading Artifactory from <a href="http://www.jfrog.com/home/v_artifactory_opensource_overview">here</a>.</p>
+<p>You can just download the zip file, then unzip it, and start up Artifactory by running the command:</p>
+<pre>&lt;ARTIFACTORY_DIRECTORY&gt;/bin/artifactoryctl start</pre>
+<p>You will need to replace &lt;ARTIFACTORY_DIRECTORY&gt; with the path to the<br>
+directory where you unzipped Artifactory.</p>
+<p>Artifactory will start up and should be accessible at:</p>
+<pre>http://localhost:8081/artifactory</pre>
+<p>The first thing you will want to do is login as the admin user (the password is <strong>password</strong>).&nbsp; Then click on the <strong>Admin</strong>
+ tab to go to the administration area.&nbsp; If you have to go through 
+an HTTP proxy to get to Maven Central, you will need to define the proxy
+ server details.&nbsp; You can do this in the Proxies page – click on <strong>Proxies</strong> in the left hand menu.</p>
+<p>Then click on the <strong>New</strong> button, give the proxy a name (key) and fill out the server, port and any other details needed to use the proxy server.</p>
+<p>Next, you need to go set the repo1 mirror to use this proxy server.&nbsp; To do this, go to the <strong>Repositories</strong> page, find repo1 in the <strong>Remote Repositories</strong> section, highlight it, click on <strong>Edit</strong> in the popup menu, go to the <strong>Advanced Settings</strong> tab, and in the <strong>Network</strong> section, choose the proxy you just defined from the dropdown list.</p>
+<p>If you do not need to use a proxy server, you can continue from this point.</p>
+<p>If you are not already there, click on the <strong>Admin</strong> tab and then the <strong>Repositories</strong> option in the left menu.</p>
+<p>In the <strong>Local Repositories</strong> section (at the top), click on the <strong>New</strong> button and create a new repository called <strong>internal</strong>.&nbsp; Select the option to <strong>Handle Releases</strong>, but do not select <strong>Handle Snapshots</strong>.</p>
+<p>Create another new local repository called <strong>snapshot</strong>, select the option to <strong>Handle Snapshots</strong>, but not <strong>Handle Releases</strong>.</p>
+<p>So we have our repositories set up.&nbsp; Now we are going to want to create a Maven settings file to use them.</p>
+<p>First, let’s create a master password so that we can store encrypted 
+passwords in our Maven settings file.&nbsp; Run the following command:</p>
+<pre>mvn -emp some_password</pre>
+<p>Change ‘some_password’ to a password of your own choosing.&nbsp; Copy the output of this command and put it into a new file in $<strong>HOME/.m2/settings-security.xml</strong> as follows:</p>
+<div><div id="highlighter_575122" class="syntaxhighlighter  xml"><table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="xml plain">&lt;</code><code class="xml keyword">settingsSecurity</code><code class="xml plain">&gt;</code></div><div class="line number2 index1 alt1"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">master</code><code class="xml plain">&gt;{vF59g61kOG4H/CNqjBmDav77Ne3tm1MChkIWwffySSM=}&lt;/</code><code class="xml keyword">master</code><code class="xml plain">&gt;</code></div><div class="line number3 index2 alt2"><code class="xml plain">&lt;/</code><code class="xml keyword">settingsSecurity</code><code class="xml plain">&gt;</code></div></div></td></tr></tbody></table></div></div>
+<p>Note that your encrypted password will be different to the one shown here.</p>
+<p>Now you can encrypt passwords for accessing servers, like our 
+Artifactory server.&nbsp; You will need to authenticate to publish new 
+artifacts into the internal and snapshot repositories.&nbsp; By default,
+ the admin user has the right to publish to these repositories, so you 
+can encrypt the admin user’s password (which is password) as follows:</p>
+<pre>mvn -ep password</pre>
+<p>Copy the output of this command, we will need it later on.</p>
+<p>Let’s take a look at the Maven settings file that lets us use our Artifactory server:</p>
+<div><div id="highlighter_682910" class="syntaxhighlighter  xml"><table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div><div class="line number20 index19 alt1">20</div><div class="line number21 index20 alt2">21</div><div class="line number22 index21 alt1">22</div><div class="line number23 index22 alt2">23</div><div class="line number24 index23 alt1">24</div><div class="line number25 index24 alt2">25</div><div class="line number26 index25 alt1">26</div><div class="line number27 index26 alt2">27</div><div class="line number28 index27 alt1">28</div><div class="line number29 index28 alt2">29</div><div class="line number30 index29 alt1">30</div><div class="line number31 index30 alt2">31</div><div class="line number32 index31 alt1">32</div><div class="line number33 index32 alt2">33</div><div class="line number34 index33 alt1">34</div><div class="line number35 index34 alt2">35</div><div class="line number36 index35 alt1">36</div><div class="line number37 index36 alt2">37</div><div class="line number38 index37 alt1">38</div><div class="line number39 index38 alt2">39</div><div class="line number40 index39 alt1">40</div><div class="line number41 index40 alt2">41</div><div class="line number42 index41 alt1">42</div><div class="line number43 index42 alt2">43</div><div class="line number44 index43 alt1">44</div><div class="line number45 index44 alt2">45</div><div class="line number46 index45 alt1">46</div><div class="line number47 index46 alt2">47</div><div class="line number48 index47 alt1">48</div><div class="line number49 index48 alt2">49</div><div class="line number50 index49 alt1">50</div><div class="line number51 index50 alt2">51</div><div class="line number52 index51 alt1">52</div><div class="line number53 index52 alt2">53</div><div class="line number54 index53 alt1">54</div><div class="line number55 index54 alt2">55</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="xml plain">&lt;</code><code class="xml keyword">settings</code><code class="xml plain">&gt;</code></div><div class="line number2 index1 alt1"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">profiles</code><code class="xml plain">&gt;</code></div><div class="line number3 index2 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">profile</code><code class="xml plain">&gt;</code></div><div class="line number4 index3 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">id</code><code class="xml plain">&gt;default&lt;/</code><code class="xml keyword">id</code><code class="xml plain">&gt;</code></div><div class="line number5 index4 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">repositories</code><code class="xml plain">&gt;</code></div><div class="line number6 index5 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">repository</code><code class="xml plain">&gt;</code></div><div class="line number7 index6 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">id</code><code class="xml plain">&gt;internal&lt;/</code><code class="xml keyword">id</code><code class="xml plain">&gt;</code></div><div class="line number8 index7 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">name</code><code class="xml plain">&gt;internal&lt;/</code><code class="xml keyword">name</code><code class="xml plain">&gt;</code></div><div class="line number9 index8 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">url</code><code class="xml plain">&gt;<a href="http://localhost:8081/artifactory/internal">http://localhost:8081/artifactory/internal</a>&lt;/</code><code class="xml keyword">url</code><code class="xml plain">&gt;</code></div><div class="line number10 index9 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">releases</code><code class="xml plain">&gt;</code></div><div class="line number11 index10 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">enabled</code><code class="xml plain">&gt;true&lt;/</code><code class="xml keyword">enabled</code><code class="xml plain">&gt;</code></div><div class="line number12 index11 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">releases</code><code class="xml plain">&gt;</code></div><div class="line number13 index12 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">snapshots</code><code class="xml plain">&gt;</code></div><div class="line number14 index13 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">enabled</code><code class="xml plain">&gt;false&lt;/</code><code class="xml keyword">enabled</code><code class="xml plain">&gt;</code></div><div class="line number15 index14 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">snapshots</code><code class="xml plain">&gt;</code></div><div class="line number16 index15 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">repository</code><code class="xml plain">&gt;</code></div><div class="line number17 index16 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">repository</code><code class="xml plain">&gt;</code></div><div class="line number18 index17 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">id</code><code class="xml plain">&gt;snapshot&lt;/</code><code class="xml keyword">id</code><code class="xml plain">&gt;</code></div><div class="line number19 index18 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">name</code><code class="xml plain">&gt;snapshot&lt;/</code><code class="xml keyword">name</code><code class="xml plain">&gt;</code></div><div class="line number20 index19 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">url</code><code class="xml plain">&gt;<a href="http://localhost:8081/artifactory/snapshot">http://localhost:8081/artifactory/snapshot</a>&lt;/</code><code class="xml keyword">url</code><code class="xml plain">&gt;</code></div><div class="line number21 index20 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">releases</code><code class="xml plain">&gt;</code></div><div class="line number22 index21 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">enabled</code><code class="xml plain">&gt;false&lt;/</code><code class="xml keyword">enabled</code><code class="xml plain">&gt;</code></div><div class="line number23 index22 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">releases</code><code class="xml plain">&gt;</code></div><div class="line number24 index23 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">snapshots</code><code class="xml plain">&gt;</code></div><div class="line number25 index24 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">enabled</code><code class="xml plain">&gt;true&lt;/</code><code class="xml keyword">enabled</code><code class="xml plain">&gt;</code></div><div class="line number26 index25 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">updatePolicy</code><code class="xml plain">&gt;always&lt;/</code><code class="xml keyword">updatePolicy</code><code class="xml plain">&gt;</code></div><div class="line number27 index26 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">snapshots</code><code class="xml plain">&gt;</code></div><div class="line number28 index27 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">repository</code><code class="xml plain">&gt;</code></div><div class="line number29 index28 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">repositories</code><code class="xml plain">&gt;</code></div><div class="line number30 index29 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">profile</code><code class="xml plain">&gt;</code></div><div class="line number31 index30 alt2"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">profiles</code><code class="xml plain">&gt;</code></div><div class="line number32 index31 alt1"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">activeProfiles</code><code class="xml plain">&gt;</code></div><div class="line number33 index32 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">activeProfile</code><code class="xml plain">&gt;default&lt;/</code><code class="xml keyword">activeProfile</code><code class="xml plain">&gt;</code></div><div class="line number34 index33 alt1"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">activeProfiles</code><code class="xml plain">&gt;</code></div><div class="line number35 index34 alt2"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">mirrors</code><code class="xml plain">&gt;</code></div><div class="line number36 index35 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">mirror</code><code class="xml plain">&gt;</code></div><div class="line number37 index36 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">id</code><code class="xml plain">&gt;mirror&lt;/</code><code class="xml keyword">id</code><code class="xml plain">&gt;</code></div><div class="line number38 index37 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">name</code><code class="xml plain">&gt;mirror&lt;/</code><code class="xml keyword">name</code><code class="xml plain">&gt;</code></div><div class="line number39 index38 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">url</code><code class="xml plain">&gt;<a href="http://localhost:8081/artifactory/repo1">http://localhost:8081/artifactory/repo1</a>&lt;/</code><code class="xml keyword">url</code><code class="xml plain">&gt;</code></div><div class="line number40 index39 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">mirrorOf</code><code class="xml plain">&gt;central&lt;/</code><code class="xml keyword">mirrorOf</code><code class="xml plain">&gt;</code></div><div class="line number41 index40 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">mirror</code><code class="xml plain">&gt;</code></div><div class="line number42 index41 alt1"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">mirrors</code><code class="xml plain">&gt;</code></div><div class="line number43 index42 alt2"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">servers</code><code class="xml plain">&gt;</code></div><div class="line number44 index43 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">server</code><code class="xml plain">&gt;</code></div><div class="line number45 index44 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">id</code><code class="xml plain">&gt;internal&lt;/</code><code class="xml keyword">id</code><code class="xml plain">&gt;</code></div><div class="line number46 index45 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">username</code><code class="xml plain">&gt;admin&lt;/</code><code class="xml keyword">username</code><code class="xml plain">&gt;</code></div><div class="line number47 index46 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">password</code><code class="xml plain">&gt;{+Ghh1+ORiAIHJ1XKXPEorNjGuMSWUgvXZJYgOaEEncY=}&lt;/</code><code class="xml keyword">password</code><code class="xml plain">&gt;</code></div><div class="line number48 index47 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">server</code><code class="xml plain">&gt;</code></div><div class="line number49 index48 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">server</code><code class="xml plain">&gt;</code></div><div class="line number50 index49 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">id</code><code class="xml plain">&gt;snapshot&lt;/</code><code class="xml keyword">id</code><code class="xml plain">&gt;</code></div><div class="line number51 index50 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">username</code><code class="xml plain">&gt;admin&lt;/</code><code class="xml keyword">username</code><code class="xml plain">&gt;</code></div><div class="line number52 index51 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">password</code><code class="xml plain">&gt;{+Ghh1+ORiAIHJ1XKXPEorNjGuMSWUgvXZJYgOaEEncY=}&lt;/</code><code class="xml keyword">password</code><code class="xml plain">&gt;</code></div><div class="line number53 index52 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">server</code><code class="xml plain">&gt;</code></div><div class="line number54 index53 alt1"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">servers</code><code class="xml plain">&gt;</code></div><div class="line number55 index54 alt2"><code class="xml plain">&lt;/</code><code class="xml keyword">settings</code><code class="xml plain">&gt;</code></div></div></td></tr></tbody></table></div></div>
+<p>So let’s review what we have in this file.&nbsp; First we have a <strong>profile,</strong> called <strong>default,</strong> which sets up the repositories and tells Maven which ones handle snapshots and releases.&nbsp; Then we activate that profile.</p>
+<p>Then we have a <strong>mirror</strong> entry to tell Maven where to look for any artifact it wants from central.</p>
+<p>Finally, we have the <strong>servers</strong> section which is used 
+to provide credentials for accessing servers.&nbsp; In this case we are 
+providing the encrypted admin user password so that we can publish to 
+these repositories.</p>
+<p>Save this file in <strong>$HOME/.m2/settings.xml</strong> and we are ready to test it out!</p>
+<p>To test the mirror, you can use the following command:</p>
+<pre>mvn help:describe</pre>
+<p>Ultimately this command will produce an error message, because we 
+have not provided enough arguments, but before that happens, it will 
+need to go download a bunch of artifacts from central, and to do that, 
+it will request them from your mirror.&nbsp; After this command has 
+started running, you can browse the repo1 repository in the Artifactory 
+web interface and you will see it starting to fill up with the various 
+artifacts that Maven needs to execute that command.</p>
+<p>So, that tells us that our mirror is working.&nbsp; Next, let’s try 
+to publish a release artifact to the internal repository.&nbsp; You 
+could use the Maven Synchronization Plugin as an example.&nbsp; This 
+will be sitting in your WebLogic Server installation, under <strong>$ORACLE_HOME/oracle_common/plugins/maven/com/oracle/maven/oracle-maven-sync/12.1.3</strong></p>
+<p>You can install it into the internal repository using this command:</p>
+<pre>mvn deploy:deploy-file
+&nbsp;&nbsp;&nbsp; 
+-Dfile=$ORACLE_HOME/oracle_common/plugins/maven/com/oracle/maven/oracle-maven-sync/12.1.3/oracle-maven-sync-12.1.3-0-0.jar
+&nbsp;&nbsp;&nbsp;
+ 
+-DpomFile=$ORACLE_HOME/oracle_common/plugins/maven/com/oracle/maven/oracle-maven-sync/12.1.3/oracle-maven-sync-12.1.3-0-0.pom
+&nbsp;&nbsp;&nbsp;
+ -DrepositoryId=internal</pre>
+<p>After running this command, you can browse the internal repository in
+ the Artifactory web interface and you will see the plugin in there.</p>
+<p>Finally, let’s test our snapshot repository.&nbsp; To do that, we 
+need a new project.&nbsp; Grab a new directory, and create a project 
+using one of the simple archetypes, like <strong>maven-archetype-quickstart</strong> for example. You can do this using this command:</p>
+<pre>mvn archetype:generate
+&nbsp;&nbsp;&nbsp; -DarchetypeGroupId=org.apache.maven.archetypes
+&nbsp;&nbsp;&nbsp; -DarchetypeArtifactId=maven-archetype-quickstart
+&nbsp;&nbsp;&nbsp; -DarchetypeVersion=1.1
+&nbsp;&nbsp;&nbsp; -DgroupId=com.test
+&nbsp;&nbsp;&nbsp; -DartifactId=project1
+&nbsp;&nbsp;&nbsp; -Dversion=1.0-SNAPSHOT</pre>
+<p>Then, go into your <strong>project1</strong> directory, and add the following <strong>distributionManagement</strong> section to your <strong>pom.xml</strong>:</p>
+<div><div id="highlighter_844574" class="syntaxhighlighter  xml"><table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="xml plain">&lt;</code><code class="xml keyword">distributionManagement</code><code class="xml plain">&gt;</code></div><div class="line number2 index1 alt1"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">repository</code><code class="xml plain">&gt;</code></div><div class="line number3 index2 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">id</code><code class="xml plain">&gt;internal&lt;/</code><code class="xml keyword">id</code><code class="xml plain">&gt;</code></div><div class="line number4 index3 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">name</code><code class="xml plain">&gt;internal&lt;/</code><code class="xml keyword">name</code><code class="xml plain">&gt;</code></div><div class="line number5 index4 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">url</code><code class="xml plain">&gt;<a href="http://localhost:8081/artifactory/internal">http://localhost:8081/artifactory/internal</a>&lt;/</code><code class="xml keyword">url</code><code class="xml plain">&gt;</code></div><div class="line number6 index5 alt1"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">repository</code><code class="xml plain">&gt;</code></div><div class="line number7 index6 alt2"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">snapshotRepository</code><code class="xml plain">&gt;</code></div><div class="line number8 index7 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">id</code><code class="xml plain">&gt;snapshot&lt;/</code><code class="xml keyword">id</code><code class="xml plain">&gt;</code></div><div class="line number9 index8 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">name</code><code class="xml plain">&gt;snapshot&lt;/</code><code class="xml keyword">name</code><code class="xml plain">&gt;</code></div><div class="line number10 index9 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">&lt;</code><code class="xml keyword">url</code><code class="xml plain">&gt;<a href="http://localhost:8081/artifactory/snapshot">http://localhost:8081/artifactory/snapshot</a>&lt;/</code><code class="xml keyword">url</code><code class="xml plain">&gt;</code></div><div class="line number11 index10 alt2"><code class="xml spaces">&nbsp;&nbsp;</code><code class="xml plain">&lt;/</code><code class="xml keyword">snapshotRepository</code><code class="xml plain">&gt;</code></div><div class="line number12 index11 alt1"><code class="xml plain">&lt;/</code><code class="xml keyword">distributionManagement</code><code class="xml plain">&gt;</code></div></div></td></tr></tbody></table></div></div>
+<p>Now you can deploy the project!&nbsp; Run this command:</p>
+<pre>mvn deploy</pre>
+<p>Then go browse your snapshot repository and you will see your project’s artifact in there!</p>
+<p>So that completes the basic setup of a Maven repository manager using
+ Artifactory and configuration of Maven to use it.&nbsp; Enjoy!</p>
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li><a href="#" class="sharing-anchor sd-button share-more"><span>Share</span></a></li><li class="share-end"></li></ul><div class="sharing-hidden"><div class="inner" style="display: none;"><ul><li class="share-email share-service-visible"><a rel="nofollow" data-shared="" class="share-email sd-button share-icon" href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/?share=email&amp;nb=1" target="_blank" title="Click to email"><span>Email</span></a></li><li class="share-twitter"><a rel="nofollow" data-shared="sharing-twitter-3017" class="share-twitter sd-button share-icon" href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/?share=twitter&amp;nb=1" target="_blank" title="Click to share on Twitter"><span>Twitter</span></a></li><li class="share-end"></li><li class="share-print"><a rel="nofollow" data-shared="" class="share-print sd-button share-icon" href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/#print" target="_blank" title="Click to print"><span>Print</span></a></li><li class="share-reddit"><a rel="nofollow" data-shared="" class="share-reddit sd-button share-icon" href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/?share=reddit&amp;nb=1" target="_blank" title="Click to share on Reddit"><span>Reddit</span></a></li><li class="share-end"></li><li class="share-facebook"><a rel="nofollow" data-shared="sharing-facebook-3017" class="share-facebook sd-button share-icon" href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/?share=facebook&amp;nb=1" target="_blank" title="Share on Facebook"><span>Facebook</span></a></li><li class="share-end"></li></ul></div></div></div></div></div><div class="sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-loaded" id="like-post-wrapper-4033274-3017-592d10df42cbe" data-src="//widgets.wp.com/likes/#blog_id=4033274&amp;post_id=3017&amp;origin=redstack.wordpress.com&amp;obj_id=4033274-3017-592d10df42cbe" data-name="like-post-frame-4033274-3017-592d10df42cbe"><h3 class="sd-title">Like this:</h3><div class="likes-widget-placeholder post-likes-widget-placeholder" style="height: 55px; display: none;"><span class="button"><span>Like</span></span> <span class="loading">Loading...</span></div><iframe class="post-likes-widget jetpack-likes-widget" name="like-post-frame-4033274-3017-592d10df42cbe" src="4%28a%29.client-side_files/a.html" height="55px" frameborder="0" width="100%"></iframe><span class="sd-text-color"></span><a class="sd-link-color"></a></div>
+<div id="jp-relatedposts" class="jp-relatedposts" style="display: block;">
+	<h3 class="jp-relatedposts-headline"><em>Related</em></h3>
+<div class="jp-relatedposts-items jp-relatedposts-items-minimal"><p class="jp-relatedposts-post jp-relatedposts-post0" data-post-id="3120" data-post-format="false"><span class="jp-relatedposts-post-title"><a class="jp-relatedposts-post-a" href="https://redstack.wordpress.com/2014/07/14/continuous-integration-without-snapshots/" title="Continuous Integration without SNAPSHOTs
+
+Maven includes a feature called SNAPSHOT which allows you to tell Maven that a particular artifact is a &quot;work in progress&quot;, not a finished version.&nbsp; This also acts as a hint to let Maven know that it should pick up the newest version of artifacts referred to as SNAPSHOTs.&nbsp; This…" rel="nofollow" data-origin="3017" data-position="0">Continuous Integration without SNAPSHOTs</a></span><span class="jp-relatedposts-post-context">In "Artifactory"</span></p><p class="jp-relatedposts-post jp-relatedposts-post1" data-post-id="2518" data-post-format="false"><span class="jp-relatedposts-post-title"><a class="jp-relatedposts-post-a" href="https://redstack.wordpress.com/2012/08/07/maven-repository-managers/" title="Maven Repository Managers
+
+In this post I just want to share a couple of thoughts on Maven Repository Managers – what they are, and why you would want to use one.&nbsp; Let’s start out with a couple of definitions: A Maven Repository is a collection of artifacts and metadata stored in a defined…" rel="nofollow" data-origin="3017" data-position="1">Maven Repository Managers</a></span><span class="jp-relatedposts-post-context">In "Maven"</span></p><p class="jp-relatedposts-post jp-relatedposts-post2" data-post-id="3158" data-post-format="false"><span class="jp-relatedposts-post-title"><a class="jp-relatedposts-post-a" href="https://redstack.wordpress.com/2015/01/14/happy-new-year-happy-new-oracle-maven-repository/" title="Happy New Year - Happy New Oracle Maven Repository
+
+To celebrate the new year, we have just gone live with the Oracle Maven Repository which contains all of the Oracle-provided artifacts for the Fusion Middleware 12.1.2 and 12.1.3 releases. You can find out more about the repository on the Maven community site here.&nbsp; We know there may be some…" rel="nofollow" data-origin="3017" data-position="2">Happy New Year - Happy New Oracle Maven Repository</a></span><span class="jp-relatedposts-post-context">In "11g"</span></p></div></div></div>											</div><!-- .entry-content -->
+
+					<div id="entry-author-info">
+						<div id="author-avatar">
+													</div><!-- #author-avatar -->
+						<div id="author-description">
+							<h2>About Mark Nelson</h2>
+							Mark Nelson is an Architect (an "IC6") in the Fusion Middleware 
+Central Development Team at Oracle.  Mark's job is to make Fusion 
+Middleware easy to use in the cloud and at home, for developers and 
+operations folks, with special focus on continuous delivery, 
+configuration management and provisioning - making it simple to manage 
+the configuration of complex environments and applications built with 
+Oracle Database, Fusion Middleware and Fusion Applications, on-premise 
+and in the cloud. Before joining this team, Mark was a senior member of 
+the A-Team since 2010, and worked in Sales Consulting at Oracle since 
+2006 and various roles at IBM since 1994.							<div id="author-link">
+								<a href="https://redstack.wordpress.com/author/markxnelson/" rel="author">
+									View all posts by Mark Nelson <span class="meta-nav">→</span>								</a>
+							</div><!-- #author-link	-->
+						</div><!-- #author-description -->
+					</div><!-- #entry-author-info -->
+
+					<div class="entry-utility">
+												This entry was posted in <a href="https://redstack.wordpress.com/category/uncategorized/" rel="category tag">Uncategorized</a> and tagged <a href="https://redstack.wordpress.com/tag/artifactory/" rel="tag">Artifactory</a>, <a href="https://redstack.wordpress.com/tag/maven/" rel="tag">Maven</a>, <a href="https://redstack.wordpress.com/tag/repository/" rel="tag">repository</a>. Bookmark the <a href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/" title="Permalink to Setting up a Maven Repository Manager with&nbsp;Artifactory" rel="bookmark">permalink</a>.											</div><!-- .entry-utility -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="https://redstack.wordpress.com/2013/10/22/writing-a-robot-remote-library/" rel="prev"><span class="meta-nav">←</span> Writing a Robot Remote&nbsp;Library</a></div>
+					<div class="nav-next"><a href="https://redstack.wordpress.com/2013/12/10/doing-more-with-the-weblogic-maven-plugin-robot-selenium-and-sonar-too/" rel="next">Doing more with the WebLogic Maven Plugin (Robot, Selenium and Sonar&nbsp;too!) <span class="meta-nav">→</span></a></div>
+				</div><!-- #nav-below -->
+
+				
+			<div id="comments">
+
+
+
+	<div id="respond" class="comment-respond js">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/#respond" style="display:none;">Cancel reply</a></small></h3>		<form action="https://redstack.wordpress.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+														
+
+
+						<input id="highlander_comment_nonce" name="highlander_comment_nonce" value="670c470e41" type="hidden"><input name="_wp_http_referer" value="/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/" type="hidden">
+<input name="hc_post_as" id="hc_post_as" value="guest" type="hidden">
+
+<div class="comment-form-field comment-textarea">
+	
+	<div id="comment-form-comment"><textarea tabindex="-1" style="position: absolute; top: -999px; left: 0px; right: auto; bottom: auto; border: 0px none; padding: 0px; box-sizing: content-box; overflow-wrap: break-word; height: 0px ! important; min-height: 0px ! important; overflow: hidden; transition: none 0s ease 0s ; font-family: Arial,Helvetica,Tahoma,Verdana,sans-serif; font-size: 14px; font-weight: 400; font-style: normal; letter-spacing: 0px; text-transform: none; text-decoration: none; word-spacing: 0px; text-indent: 0px; line-height: 24px; width: 618px;" class="autosizejs ">Enter your comment here...</textarea><textarea id="comment" name="comment" title="Enter your comment here..." placeholder="Enter your comment here..." style="height: 44px; overflow: hidden; overflow-wrap: break-word; resize: none;"></textarea></div>
+</div>
+
+<div id="comment-form-identity" class="comment_registration" style="display: none;">
+
+	<div id="comment-form-nascar">
+		<p>Please log in using one of these methods to post your comment:</p>
+		<ul>
+			<li>
+				<a href="#comment-form-load-service:WordPress.com" id="postas-wordpress" title="WordPress.com">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a href="#comment-form-load-service:Twitter" id="postas-twitter" title="Twitter">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a href="#comment-form-load-service:Facebook" id="postas-facebook" title="Facebook">
+					<span></span>
+				</a>
+			</li>
+			<li>
+			<iframe id="googleplus-sign-in" name="googleplus-sign-in" src="4%28a%29.client-side_files/a_002.html" scrolling="no" allowtransparency="true" seamless="seamless" height="24" frameborder="0" width="24"></iframe>
+			</li>
+		</ul>
+	</div>
+
+	<div id="comment-form-guest" class="comment-form-service selected" style="display: none;">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+<a href="https://gravatar.com/site/signup/" target="_blank">				<img src="" alt="Gravatar" class="no-grav" width="25">
+</a>			</div>
+
+				<div class="comment-form-fields">
+				<div class="comment-form-field comment-form-email">
+					<label for="email">Email <span class="required">(required)</span> <span class="nopublish">(Address never made public)</span></label>
+					<div class="comment-form-input"><input id="email" name="email" type="email"></div>
+				</div>
+				<div class="comment-form-field comment-form-author">
+					<label for="author">Name <span class="required">(required)</span></label>
+					<div class="comment-form-input"><input id="author" name="author" type="text"></div>
+				</div>
+				<div class="comment-form-field comment-form-url">
+					<label for="url">Website</label>
+					<div class="comment-form-input"><input id="url" name="url" type="url"></div>
+				</div>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-wordpress" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="" alt="WordPress.com Logo" class="no-grav" width="25">
+			</div>
+
+				<div class="comment-form-fields">
+				<input name="wp_avatar" id="wordpress-avatar" class="comment-meta-wordpress" value="" type="hidden">
+				<input name="wp_user_id" id="wordpress-user_id" class="comment-meta-wordpress" value="" type="hidden">
+				<input name="wp_access_token" id="wordpress-access_token" class="comment-meta-wordpress" value="" type="hidden">
+				<p class="comment-form-posting-as pa-wordpress"><strong></strong> You are commenting using your WordPress.com account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout(%20'wordpress'%20);">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-twitter" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="" alt="Twitter picture" class="no-grav" width="25">
+			</div>
+
+				<div class="comment-form-fields">
+				<input name="twitter_avatar" id="twitter-avatar" class="comment-meta-twitter" value="" type="hidden">
+				<input name="twitter_user_id" id="twitter-user_id" class="comment-meta-twitter" value="" type="hidden">
+				<input name="twitter_access_token" id="twitter-access_token" class="comment-meta-twitter" value="" type="hidden">
+				<p class="comment-form-posting-as pa-twitter"><strong></strong> You are commenting using your Twitter account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout(%20'twitter'%20);">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-facebook" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="" alt="Facebook photo" class="no-grav" width="25">
+			</div>
+
+				<div class="comment-form-fields">
+				<input name="fb_avatar" id="facebook-avatar" class="comment-meta-facebook" value="" type="hidden">
+				<input name="fb_user_id" id="facebook-user_id" class="comment-meta-facebook" value="" type="hidden">
+				<input name="fb_access_token" id="facebook-access_token" class="comment-meta-facebook" value="" type="hidden">
+				<p class="comment-form-posting-as pa-facebook"><strong></strong> You are commenting using your Facebook account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout(%20'facebook'%20);">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-googleplus" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="" alt="Google+ photo" class="no-grav" width="25">
+			</div>
+
+				<div class="comment-form-fields">
+				<input name="googleplus_avatar" id="googleplus-avatar" class="comment-meta-googleplus" value="" type="hidden">
+				<input name="googleplus_user_id" id="googleplus-user_id" class="comment-meta-googleplus" value="" type="hidden">
+				<input name="googleplus_access_token" id="googleplus-access_token" class="comment-meta-googleplus" value="" type="hidden">
+				<p class="comment-form-posting-as pa-googleplus"><strong></strong> You are commenting using your Google+ account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout(%20'googleplus'%20);">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+
+	<div id="comment-form-load-service" class="comment-form-service">
+		<div class="comment-form-posting-as-cancel"><a href="javascript:HighlanderComments.cancelExternalWindow();">Cancel</a></div>
+		<p>Connecting to %s</p>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+var highlander_expando_javascript = function(){
+	var input = document.createElement( 'input' ),
+	    comment = jQuery( '#comment' );
+
+	if ( 'placeholder' in input ) {
+		comment.attr( 'placeholder', jQuery( '.comment-textarea label' 
+).remove().text() );
+	}
+
+	// Expando Mode: start small, then auto-resize on first click + text 
+length
+	jQuery( '#comment-form-identity' ).hide();
+	jQuery( '#comment-form-subscribe' ).hide();
+	jQuery( '#commentform .form-submit' ).hide();
+
+	comment.css( { 'height':'10px' } ).one( 'focus', function() {
+		var timer = setInterval( HighlanderComments.resizeCallback, 10 )
+		jQuery( this ).animate( { 'height': HighlanderComments.initialHeight }
+ ).delay( 100 ).queue( function(n) { clearInterval( timer ); 
+HighlanderComments.resizeCallback(); n(); } );
+		jQuery( '#comment-form-identity' ).slideDown();
+		jQuery( '#comment-form-subscribe' ).slideDown();
+		jQuery( '#commentform .form-submit' ).slideDown();
+	});
+}
+jQuery(document).ready( highlander_expando_javascript );
+</script>
+
+<div id="comment-form-subscribe" style="display: none;">
+	<p class="comment-subscription-form"><input name="subscribe" id="subscribe" value="subscribe" style="width: auto;" type="checkbox"> <label class="subscribe-label" id="subscribe-label" for="subscribe" style="display: inline;">Notify me of new comments via email.</label></p></div>
+
+<style type="text/css">
+#respond .comment-form-avatar { display: none !important; }
+#respond .comment-form-fields { margin-left: 0 !important; }
+</style>
+
+						<p class="form-submit" style="display: none;">
+				<input name="submit" id="comment-submit" value="Post Comment" type="submit">
+				<input name="comment_post_ID" value="3017" id="comment_post_ID" type="hidden">
+<input name="comment_parent" id="comment_parent" value="0" type="hidden">
+			</p>
+			<p style="display: none;"><input id="akismet_comment_nonce" name="akismet_comment_nonce" value="4ad3aeb316" type="hidden"></p>
+<input name="genseq" value="1496125663" type="hidden">
+<p style="display: none;"></p>		<input id="ak_js" name="ak_js" value="1496140018821" type="hidden"></form>
+	</div><!-- #respond -->
+	<div style="clear: both"></div>
+</div><!-- #comments -->
+
+
+			</div><!-- #content -->
+		</div><!-- #container -->
+
+
+		<div id="primary" class="widget-area" role="complementary">
+						<ul class="xoxo">
+
+<li id="search-2" class="widget-container widget_search"><form role="search" method="get" id="searchform" class="searchform" action="https://redstack.wordpress.com/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input name="s" id="s" type="text">
+					<input id="searchsubmit" value="Search" type="submit">
+				</div>
+			</form></li><li id="blog-stats-2" class="widget-container widget_blog-stats"><h3 class="widget-title">Thank you visitors!</h3>		<ul>
+			<li>1,146,729 people have been kind enough to visit our humble blog. 
+ Others get our posts by RSS or email or through syndicators.  We hope 
+you took away something of value.  Please come again!</li>
+		</ul>
+		</li><li id="wp_tag_cloud-2" class="widget-container wp_widget_tag_cloud"><h3 class="widget-title"></h3><div style="overflow:hidden"><a href="https://redstack.wordpress.com/tag/net/" class="tag-link-2427 tag-link-position-1" title="4 topics" style="font-size: 10.124137931034pt;">.Net</a>
+<a href="https://redstack.wordpress.com/tag/11g/" class="tag-link-536424 tag-link-position-2" title="57 topics" style="font-size: 20.358620689655pt;">11g</a>
+<a href="https://redstack.wordpress.com/tag/12c/" class="tag-link-951292 tag-link-position-3" title="19 topics" style="font-size: 15.91724137931pt;">12c</a>
+<a href="https://redstack.wordpress.com/tag/active-directory/" class="tag-link-35699 tag-link-position-4" title="2 topics" style="font-size: 8pt;">Active Directory</a>
+<a href="https://redstack.wordpress.com/tag/adf/" class="tag-link-307144 tag-link-position-5" title="21 topics" style="font-size: 16.303448275862pt;">ADF</a>
+<a href="https://redstack.wordpress.com/tag/adf-mobile/" class="tag-link-34248190 tag-link-position-6" title="3 topics" style="font-size: 9.1586206896552pt;">ADF Mobile</a>
+<a href="https://redstack.wordpress.com/tag/android/" class="tag-link-641922 tag-link-position-7" title="2 topics" style="font-size: 8pt;">Android</a>
+<a href="https://redstack.wordpress.com/tag/array/" class="tag-link-271798 tag-link-position-8" title="3 topics" style="font-size: 9.1586206896552pt;">array</a>
+<a href="https://redstack.wordpress.com/tag/artifactory/" class="tag-link-2091581 tag-link-position-9" title="5 topics" style="font-size: 10.896551724138pt;">Artifactory</a>
+<a href="https://redstack.wordpress.com/tag/bpel/" class="tag-link-172842 tag-link-position-10" title="10 topics" style="font-size: 13.406896551724pt;">BPEL</a>
+<a href="https://redstack.wordpress.com/tag/bpm/" class="tag-link-51757 tag-link-position-11" title="85 topics" style="font-size: 22pt;">BPM</a>
+<a href="https://redstack.wordpress.com/tag/c/" class="tag-link-2426 tag-link-position-12" title="5 topics" style="font-size: 10.896551724138pt;">C#</a>
+<a href="https://redstack.wordpress.com/tag/chef/" class="tag-link-225871 tag-link-position-13" title="5 topics" style="font-size: 10.896551724138pt;">Chef</a>
+<a href="https://redstack.wordpress.com/tag/cluster/" class="tag-link-9868 tag-link-position-14" title="3 topics" style="font-size: 9.1586206896552pt;">cluster</a>
+<a href="https://redstack.wordpress.com/tag/coherence/" class="tag-link-197646 tag-link-position-15" title="7 topics" style="font-size: 12.055172413793pt;">Coherence</a>
+<a href="https://redstack.wordpress.com/tag/composer/" class="tag-link-28781 tag-link-position-16" title="2 topics" style="font-size: 8pt;">Composer</a>
+<a href="https://redstack.wordpress.com/tag/continuous-integration/" class="tag-link-163615 tag-link-position-17" title="15 topics" style="font-size: 14.951724137931pt;">Continuous Integration</a>
+<a href="https://redstack.wordpress.com/tag/customization/" class="tag-link-1664 tag-link-position-18" title="2 topics" style="font-size: 8pt;">customization</a>
+<a href="https://redstack.wordpress.com/tag/database/" class="tag-link-475 tag-link-position-19" title="10 topics" style="font-size: 13.406896551724pt;">database</a>
+<a href="https://redstack.wordpress.com/tag/dave-shaffer/" class="tag-link-65027100 tag-link-position-20" title="2 topics" style="font-size: 8pt;">Dave Shaffer</a>
+<a href="https://redstack.wordpress.com/tag/docker/" class="tag-link-4504191 tag-link-position-21" title="4 topics" style="font-size: 10.124137931034pt;">Docker</a>
+<a href="https://redstack.wordpress.com/tag/e-business-suite/" class="tag-link-3092294 tag-link-position-22" title="4 topics" style="font-size: 10.124137931034pt;">E-Business Suite</a>
+<a href="https://redstack.wordpress.com/tag/feature-pack/" class="tag-link-3948053 tag-link-position-23" title="2 topics" style="font-size: 8pt;">Feature Pack</a>
+<a href="https://redstack.wordpress.com/tag/garbage-collection/" class="tag-link-679865 tag-link-position-24" title="2 topics" style="font-size: 8pt;">Garbage Collection</a>
+<a href="https://redstack.wordpress.com/tag/git/" class="tag-link-209196 tag-link-position-25" title="4 topics" style="font-size: 10.124137931034pt;">git</a>
+<a href="https://redstack.wordpress.com/tag/hudson/" class="tag-link-288103 tag-link-position-26" title="7 topics" style="font-size: 12.055172413793pt;">Hudson</a>
+<a href="https://redstack.wordpress.com/tag/human-task/" class="tag-link-28888159 tag-link-position-27" title="7 topics" style="font-size: 12.055172413793pt;">Human Task</a>
+<a href="https://redstack.wordpress.com/tag/iphone/" class="tag-link-106595 tag-link-position-28" title="3 topics" style="font-size: 9.1586206896552pt;">iPhone</a>
+<a href="https://redstack.wordpress.com/tag/java/" class="tag-link-1017 tag-link-position-29" title="2 topics" style="font-size: 8pt;">Java</a>
+<a href="https://redstack.wordpress.com/tag/java-7/" class="tag-link-1059807 tag-link-position-30" title="2 topics" style="font-size: 8pt;">Java 7</a>
+<a href="https://redstack.wordpress.com/tag/jdeveloper/" class="tag-link-418003 tag-link-position-31" title="14 topics" style="font-size: 14.758620689655pt;">JDeveloper</a>
+<a href="https://redstack.wordpress.com/tag/jdk/" class="tag-link-321679 tag-link-position-32" title="3 topics" style="font-size: 9.1586206896552pt;">JDK</a>
+<a href="https://redstack.wordpress.com/tag/jms/" class="tag-link-254692 tag-link-position-33" title="6 topics" style="font-size: 11.572413793103pt;">JMS</a>
+<a href="https://redstack.wordpress.com/tag/jrockit/" class="tag-link-11747529 tag-link-position-34" title="2 topics" style="font-size: 8pt;">JRockit</a>
+<a href="https://redstack.wordpress.com/tag/jvm/" class="tag-link-461295 tag-link-position-35" title="4 topics" style="font-size: 10.124137931034pt;">JVM</a>
+<a href="https://redstack.wordpress.com/tag/mac-os-x/" class="tag-link-3348 tag-link-position-36" title="3 topics" style="font-size: 9.1586206896552pt;">Mac OS X</a>
+<a href="https://redstack.wordpress.com/tag/maven/" class="tag-link-47862 tag-link-position-37" title="43 topics" style="font-size: 19.2pt;">Maven</a>
+<a href="https://redstack.wordpress.com/tag/mds/" class="tag-link-748541 tag-link-position-38" title="4 topics" style="font-size: 10.124137931034pt;">MDS</a>
+<a href="https://redstack.wordpress.com/tag/memory/" class="tag-link-1471 tag-link-position-39" title="3 topics" style="font-size: 9.1586206896552pt;">memory</a>
+<a href="https://redstack.wordpress.com/tag/nexus/" class="tag-link-22008 tag-link-position-40" title="3 topics" style="font-size: 9.1586206896552pt;">Nexus</a>
+<a href="https://redstack.wordpress.com/tag/oam/" class="tag-link-538091 tag-link-position-41" title="2 topics" style="font-size: 8pt;">OAM</a>
+<a href="https://redstack.wordpress.com/tag/opa/" class="tag-link-548197 tag-link-position-42" title="2 topics" style="font-size: 8pt;">OPA</a>
+<a href="https://redstack.wordpress.com/tag/oracle-maven-repository/" class="tag-link-319135984 tag-link-position-43" title="6 topics" style="font-size: 11.572413793103pt;">Oracle Maven Repository</a>
+<a href="https://redstack.wordpress.com/tag/osb/" class="tag-link-1377995 tag-link-position-44" title="11 topics" style="font-size: 13.793103448276pt;">OSB</a>
+<a href="https://redstack.wordpress.com/tag/peoplesoft/" class="tag-link-133172 tag-link-position-45" title="2 topics" style="font-size: 8pt;">PeopleSoft</a>
+<a href="https://redstack.wordpress.com/tag/performance/" class="tag-link-1930 tag-link-position-46" title="7 topics" style="font-size: 12.055172413793pt;">Performance</a>
+<a href="https://redstack.wordpress.com/tag/process/" class="tag-link-9719 tag-link-position-47" title="3 topics" style="font-size: 9.1586206896552pt;">Process</a>
+<a href="https://redstack.wordpress.com/tag/puppet/" class="tag-link-3548 tag-link-position-48" title="3 topics" style="font-size: 9.1586206896552pt;">Puppet</a>
+<a href="https://redstack.wordpress.com/tag/purge/" class="tag-link-55752 tag-link-position-49" title="4 topics" style="font-size: 10.124137931034pt;">purge</a>
+<a href="https://redstack.wordpress.com/tag/robot/" class="tag-link-90436 tag-link-position-50" title="4 topics" style="font-size: 10.124137931034pt;">robot</a>
+<a href="https://redstack.wordpress.com/tag/rules/" class="tag-link-22714 tag-link-position-51" title="2 topics" style="font-size: 8pt;">Rules</a>
+<a href="https://redstack.wordpress.com/tag/sca-test/" class="tag-link-59552926 tag-link-position-52" title="2 topics" style="font-size: 8pt;">SCA Test</a>
+<a href="https://redstack.wordpress.com/tag/sdlc/" class="tag-link-110690 tag-link-position-53" title="4 topics" style="font-size: 10.124137931034pt;">SDLC</a>
+<a href="https://redstack.wordpress.com/tag/soa/" class="tag-link-11271 tag-link-position-54" title="60 topics" style="font-size: 20.648275862069pt;">SOA</a>
+<a href="https://redstack.wordpress.com/tag/sonar/" class="tag-link-149492 tag-link-position-55" title="3 topics" style="font-size: 9.1586206896552pt;">Sonar</a>
+<a href="https://redstack.wordpress.com/tag/spaces/" class="tag-link-38744 tag-link-position-56" title="4 topics" style="font-size: 10.124137931034pt;">Spaces</a>
+<a href="https://redstack.wordpress.com/tag/sso/" class="tag-link-325304 tag-link-position-57" title="2 topics" style="font-size: 8pt;">SSO</a>
+<a href="https://redstack.wordpress.com/tag/subversion/" class="tag-link-42964 tag-link-position-58" title="5 topics" style="font-size: 10.896551724138pt;">Subversion</a>
+<a href="https://redstack.wordpress.com/tag/task-flow/" class="tag-link-1273230 tag-link-position-59" title="2 topics" style="font-size: 8pt;">task flow</a>
+<a href="https://redstack.wordpress.com/tag/testing/" class="tag-link-12 tag-link-position-60" title="8 topics" style="font-size: 12.537931034483pt;">Testing</a>
+<a href="https://redstack.wordpress.com/tag/tricks/" class="tag-link-4841 tag-link-position-61" title="8 topics" style="font-size: 12.537931034483pt;">Tricks</a>
+<a href="https://redstack.wordpress.com/tag/tuning/" class="tag-link-88264 tag-link-position-62" title="2 topics" style="font-size: 8pt;">tuning</a>
+<a href="https://redstack.wordpress.com/tag/ubuntu/" class="tag-link-255 tag-link-position-63" title="2 topics" style="font-size: 8pt;">Ubuntu</a>
+<a href="https://redstack.wordpress.com/tag/ucm/" class="tag-link-685945 tag-link-position-64" title="5 topics" style="font-size: 10.896551724138pt;">UCM</a>
+<a href="https://redstack.wordpress.com/tag/upgrade/" class="tag-link-8683 tag-link-position-65" title="2 topics" style="font-size: 8pt;">upgrade</a>
+<a href="https://redstack.wordpress.com/tag/wci/" class="tag-link-1745311 tag-link-position-66" title="3 topics" style="font-size: 9.1586206896552pt;">WCI</a>
+<a href="https://redstack.wordpress.com/tag/webcenter/" class="tag-link-2518276 tag-link-position-67" title="15 topics" style="font-size: 14.951724137931pt;">WebCenter</a>
+<a href="https://redstack.wordpress.com/tag/weblogic/" class="tag-link-4476 tag-link-position-68" title="44 topics" style="font-size: 19.296551724138pt;">WebLogic</a>
+<a href="https://redstack.wordpress.com/tag/web-service/" class="tag-link-13849 tag-link-position-69" title="3 topics" style="font-size: 9.1586206896552pt;">Web Service</a>
+<a href="https://redstack.wordpress.com/tag/wls/" class="tag-link-231997 tag-link-position-70" title="3 topics" style="font-size: 9.1586206896552pt;">WLS</a>
+<a href="https://redstack.wordpress.com/tag/wlst/" class="tag-link-2155220 tag-link-position-71" title="3 topics" style="font-size: 9.1586206896552pt;">WLST</a>
+<a href="https://redstack.wordpress.com/tag/worklist/" class="tag-link-1935858 tag-link-position-72" title="23 topics" style="font-size: 16.689655172414pt;">Worklist</a>
+<a href="https://redstack.wordpress.com/tag/ws-security/" class="tag-link-320476 tag-link-position-73" title="4 topics" style="font-size: 10.124137931034pt;">WS-Security</a>
+<a href="https://redstack.wordpress.com/tag/wsrp/" class="tag-link-532679 tag-link-position-74" title="2 topics" style="font-size: 8pt;">WSRP</a>
+<a href="https://redstack.wordpress.com/tag/xe/" class="tag-link-946049 tag-link-position-75" title="2 topics" style="font-size: 8pt;">XE</a></div></li><li id="text-2" class="widget-container widget_text"><h3 class="widget-title">Subscribe</h3>			<div class="textwidget"><a href="https://redstack.wordpress.com/feed">Click here to subscribe using RSS</a></div>
+		</li><li id="text-6" class="widget-container widget_text"><h3 class="widget-title">The A-Team Chronicles</h3>			<div class="textwidget">Find posts from The A-Team at their official site: <br>
+<a href="http://www.ateam-oracle.com/"><img src="4%28a%29.client-side_files/ateam-chronicles.png"></a>
+<br>
+Or subscribe to all of their posts <a href="http://ateam-oracle.com/feed">here</a>.</div>
+		</li><li id="linkcat-1356" class="widget-container widget_links"><h3 class="widget-title">Blogroll</h3>
+	<ul class="xoxo blogroll">
+<li><a href="http://blogs.oracle.com/reynolds/">Antony Reynolds</a></li>
+<li><a href="http://beatechnologies.wordpress.com/">Arun Pareek</a></li>
+<li><a href="http://autumnator.wordpress.com/" target="_blank">Autumnator</a></li>
+<li><a href="http://one-size-doesnt-fit-all.blogspot.com/">Chris Muir</a></li>
+<li><a href="http://www.middleworks.com/">Dave Shaffer</a></li>
+<li><a href="http://dasoaworld.blogspot.com/">Deepak Arora</a></li>
+<li><a href="http://fusionsecurity.blogspot.com/">Eidleman, Johnson et al</a></li>
+<li><a href="http://www.oraclefmw.com/">Gary Niu</a></li>
+<li><a href="http://georgemaggessy.blogspot.com/">George Maggessy</a></li>
+<li><a href="http://oraclemva.wordpress.com/">Jacco H. Landlust</a></li>
+<li><a href="http://blogs.oracle.com/fmw/">Jack Desai</a></li>
+<li><a href="http://kettenisblogs.blogspot.com/">Jan Kettenis</a></li>
+<li><a href="http://blogs.sun.com/mikesblog/">Mike Somekh</a></li>
+<li><a href="https://blogs.oracle.com/bpm/">Official Oracle BPM Blog</a></li>
+<li><a href="http://pauldone.blogspot.com/">Paul Done</a></li>
+<li><a href="http://pmoskovi.wordpress.com/" rel="friend met colleague" target="_blank">Peter Moskovits</a></li>
+<li><a href="http://pietermalan.blogspot.com.au/">Pieter Malan</a></li>
+<li><a href="http://blogs.oracle.com/practicalbpm/">Practical BPM</a></li>
+<li><a href="http://www.rubiconred.com/">Rubicon Red</a></li>
+<li><a href="https://blogs.oracle.com/shay/">Shay Shmeltzer</a></li>
+<li><a href="http://buttso.blogspot.com/">Steve Button</a></li>
+<li><a href="http://coherencedownunder.wordpress.com/">Tim Middleton</a></li>
+<li><a href="http://wordpress.com/">WordPress.com</a></li>
+
+	</ul>
+</li>
+<li id="top-posts-2" class="widget-container widget_top-posts"><h3 class="widget-title">Top Posts</h3><ul>				<li>
+										<a href="https://redstack.wordpress.com/2010/12/22/configuring-maven-to-run-your-java-application/" class="bump-view" data-bump-view="tp">
+						Configuring Maven to run your Java application					</a>
+									</li>
+							<li>
+										<a href="https://redstack.wordpress.com/2009/12/21/a-simple-jms-client-for-weblogic-11g/" class="bump-view" data-bump-view="tp">
+						A simple JMS client for WebLogic 11g					</a>
+									</li>
+							<li>
+										<a href="https://redstack.wordpress.com/2010/12/20/using-weblogic-as-a-load-balancer/" class="bump-view" data-bump-view="tp">
+						Using WebLogic as a Load Balancer					</a>
+									</li>
+							<li>
+										<a href="https://redstack.wordpress.com/2016/03/21/oracle-publishes-official-chef-and-puppet-samples-on-github/" class="bump-view" data-bump-view="tp">
+						Oracle publishes official Chef and Puppet samples on github					</a>
+									</li>
+							<li>
+										<a href="https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/" class="bump-view" data-bump-view="tp">
+						Setting up a Maven Repository Manager with Artifactory					</a>
+									</li>
+							<li>
+										<a href="https://redstack.wordpress.com/2011/03/15/getting-started-with-continuous-integration-for-soa-projects/" class="bump-view" data-bump-view="tp">
+						Getting started with Continuous Integration for SOA projects					</a>
+									</li>
+							<li>
+										<a href="https://redstack.wordpress.com/2011/01/31/deploying-weblogic-applications-with-maven/" class="bump-view" data-bump-view="tp">
+						Deploying WebLogic applications with Maven					</a>
+									</li>
+							<li>
+										<a href="https://redstack.wordpress.com/2012/08/09/automating-creation-of-jdbc-data-sources-and-dbadapter-plan-updates-and-redeployment/" class="bump-view" data-bump-view="tp">
+						Automating creation of JDBC Data Sources and DbAdapter plan updates and redeployment					</a>
+									</li>
+							<li>
+										<a href="https://redstack.wordpress.com/2015/01/23/oracle-maven-repository-index-now-available-more-to-come/" class="bump-view" data-bump-view="tp">
+						Oracle Maven Repository - Index now available - more to come					</a>
+									</li>
+							<li>
+										<a href="https://redstack.wordpress.com/2013/02/27/log-rotation-for-weblogic-server-and-friends/" class="bump-view" data-bump-view="tp">
+						Log rotation for WebLogic Server (and friends)					</a>
+									</li>
+			</ul></li><li id="text-3" class="widget-container widget_text"><h3 class="widget-title"> </h3>			<div class="textwidget"><p>Copyright
+ 2009-2015 Mark Nelson, Tanya Williams and other contributors.  All 
+Rights Reserved.  The views expressed in this blog are our own and do 
+not necessarily reflect the views of Oracle Corporation.  All content is
+ provided on an 'as is' basis, without warranties or conditions of any 
+kind, either express or implied, including, without limitation, any 
+warranties or conditions of title, non-infringement, merchantability, or
+ fitness for a particular purpose.  You are solely responsible for 
+determining the appropriateness of using or redistributing and assume 
+any risks.</p>
+<p>The header image is a photograph of a house in China, taken by one of
+ my favourite photographers, Roland Slee.  Used with permission.  
+Copyright Roland Slee.</p>
+</div>
+		</li><li id="text-4" class="widget-container widget_text"><h3 class="widget-title">About Advertising</h3>			<div class="textwidget">WordPress
+ does not allow blog owners to advertise on blogs hosted on 
+wordpress.com, however they do sometimes inject their own advertisments 
+into some pages for some users in order to produce revenue to support 
+the great service they provide to us at no charge.  WordPress provide 
+blog owners with the ability to opt-out of this advertising for a small 
+yearly fee. We prefer not to have advertisements displayed to readers of
+ our blog and have opted out for your viewing pleasure.</div>
+		</li><li id="text-5" class="widget-container widget_text"><h3 class="widget-title">Our other publications</h3>			<div class="textwidget"><p><a href="https://redstack.files.wordpress.com/2011/08/building-a-custom-worklist.pdf">Building a Custom BPM Worklist</a>, Oracle InSync 2011 User Group presentation</p>
+<p><a href="http://www.oracle.com/technetwork/middleware/bpm/learnmore/bpm10gperformancetuning-476208.pdf">Performance Tuning for Oracle Business Process Management Suite 10g</a>, Oracle Whitepaper, July 2011</p>
+<p><a href="http://www.oracle.com/technetwork/middleware/bpm/learnmore/bpm11gperftuning-1912340.pdf">Performance Tuning for Oracle Business Process Management Suite 11g</a>, Oracle Whitepaper, February 2013</p>
+<p><a href="http://www.packtpub.com/oracle-advanced-business-process-management-suite-11g/book"><img src="4%28a%29.client-side_files/book1.png" width="160/"></a></p><a href="http://www.packtpub.com/oracle-advanced-business-process-management-suite-11g/book">
+</a><p><a href="http://www.packtpub.com/oracle-advanced-business-process-management-suite-11g/book">Oracle BPM Suite 11g: Advanced BPMN Topics</a>, Packt Publishing, September 2012</p>
+<p><a href="http://docs.oracle.com/middleware/1212/core/MAVEN/introduction.htm#MAVEN8755">Fusion Middleware 12.1.2: Developing Applications with Continuous Integration</a></p>
+<p><a href="http://docs.oracle.com/middleware/1213/core/MAVEN/introduction.htm#MAVEN8755">Fusion Middleware 12.1.3: Developing Applications with Continuous Integration</a></p>
+<p><a href="http://goo.gl/q8cwgP">Continuous Delivery</a></p>
+</div>
+		</li>			</ul>
+		</div><!-- #primary .widget-area -->
+
+	</div><!-- #main -->
+
+	<div id="footer" role="contentinfo">
+		<div id="colophon">
+
+
+
+			<div id="site-info">
+				<a href="https://redstack.wordpress.com/" title="RedStack" rel="home">
+					RedStack				</a>
+			</div><!-- #site-info -->
+
+			<div id="site-generator">
+								<a href="https://wordpress.com/?ref=footer_blog">Blog at WordPress.com.</a>
+			</div><!-- #site-generator -->
+
+		</div><!-- #colophon -->
+	</div><!-- #footer -->
+
+</div><!-- #wrapper -->
+
+<!--  -->
+	<div style="display:none">
+	</div>
+<script type="text/javascript">
+/* <![CDATA[ */
+var HighlanderComments = {"loggingInText":"Logging 
+In\u2026","submittingText":"Posting 
+Comment\u2026","postCommentText":"Post 
+Comment","connectingToText":"Connecting to %s","commentingAsText":"%1$s:
+ You are commenting using your %2$s account.","logoutText":"Log 
+Out","loginText":"Log 
+In","connectURL":"https:\/\/redstack.wordpress.com\/public.api\/connect\/?action=request","logoutURL":"https:\/\/redstack.wordpress.com\/wp-login.php?action=logout&_wpnonce=8c56d8d8d8","homeURL":"https:\/\/redstack.wordpress.com\/","postID":"3017","gravDefault":"mystery","enterACommentError":"Please
+ enter a comment","enterEmailError":"Please enter your email address 
+here","invalidEmailError":"Invalid email 
+address","enterAuthorError":"Please enter your name 
+here","gravatarFromEmail":"This picture will show whenever you leave a 
+comment. Click to customize it.","logInToExternalAccount":"Log in to use
+ details from one of these 
+accounts.","change":"Change","changeAccount":"Change 
+Account","comment_registration":"1","userIsLoggedIn":"","isJetpack":"0","text_direction":"ltr"};
+/*
+ ]]> */
+</script>
+<script type="text/javascript" src="4%28a%29.client-side_files/a"></script>
+
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = 
+{"https:\/\/redstack.wordpress.com\/2013\/12\/04\/setting-up-a-maven-repository-manager-with-artifactory\/":3017};
+
+	</script>
+	
+		<script type="text/javascript">
+			var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-twitter' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+				return false;
+			});
+		});
+		</script>
+				<script type="text/javascript">
+			var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-facebook' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+				return false;
+			});
+		});
+		</script>
+		<script type="text/javascript" src="4%28a%29.client-side_files/form.js"></script>
+<script type="text/javascript" src="4%28a%29.client-side_files/a_002"></script>
+<script type="text/javascript">
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = 
+"https://s0.wp.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9b";
+
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, 
+document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = 
+"https://s0.wp.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?m=1363304414h&amp;ver=3.0.9b";
+
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		
+//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+
+		document.getElementsByTagName("head")[0].insertBefore( themecss, 
+document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t 
+configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+
+// Infinite scroll support
+jQuery( function( $ ) {
+	$( document.body ).on( 'post-load', function() {
+		SyntaxHighlighter.highlight();
+	} );
+} );
+</script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var actionbardata = 
+{"siteID":"4033274","siteName":"RedStack","siteURL":"http:\/\/redstack.wordpress.com","icon":"<img
+ alt='' src='https:\/\/s1.wp.com\/i\/logo\/wpcom-gray-white.png' 
+class='avatar avatar-50' height='50' width='50' 
+\/>","canManageOptions":"","canCustomizeSite":"","isFollowing":"","themeSlug":"pub\/twentyten","signupURL":"https:\/\/wordpress.com\/start\/","loginURL":"https:\/\/redstack.wordpress.com\/wp-login.php?redirect_to=https%3A%2F%2Fredstack.wordpress.com%2F2013%2F12%2F04%2Fsetting-up-a-maven-repository-manager-with-artifactory%2F","themeURL":"https:\/\/wordpress.com\/theme\/twentyten\/","xhrURL":"https:\/\/redstack.wordpress.com\/wp-admin\/admin-ajax.php","nonce":"880e4a9405","isSingular":"1","isFolded":"","isLoggedIn":"","isMobile":"","subscribeNonce":"<input
+ type=\"hidden\" id=\"_wpnonce\" name=\"_wpnonce\" value=\"b994d303fd\" 
+\/>","referer":"https:\/\/redstack.wordpress.com\/2013\/12\/04\/setting-up-a-maven-repository-manager-with-artifactory\/","canFollow":"1","statusMessage":"","customizeLink":"https:\/\/redstack.wordpress.com\/wp-admin\/customize.php?url=https%3A%2F%2Fredstack.wordpress.com%2F2013%2F12%2F04%2Fsetting-up-a-maven-repository-manager-with-artifactory%2F","postID":"3017","shortlink":"http:\/\/wp.me\/pgVeO-MF","canEditPost":"","editLink":"https:\/\/wordpress.com\/post\/redstack.wordpress.com\/3017","statsLink":"https:\/\/wordpress.com\/stats\/post\/3017\/redstack.wordpress.com","i18n":{"view":"View
+ 
+site","follow":"Follow","following":"Following","edit":"Edit","login":"Log
+ in","signup":"Sign up","customize":"Customize","report":"Report this 
+content","themeInfo":"Get theme: Twenty Ten","shortlink":"Copy 
+shortlink","copied":"Copied","followedText":"New posts from this site 
+will now appear in your <a 
+href=\"https:\/\/wordpress.com\/\">Reader<\/a>","foldBar":"Collapse this
+ bar","unfoldBar":"Expand this bar","editSubs":"Manage 
+subscriptions","viewReader":"View site in the Reader","subscribe":"Sign 
+me up","enterEmail":"Enter your email address","followers":"Join 565 
+other followers","alreadyUser":"Already have a WordPress.com account? <a
+ 
+href=\"https:\/\/redstack.wordpress.com\/wp-login.php?redirect_to=https%3A%2F%2Fredstack.wordpress.com%2F2013%2F12%2F04%2Fsetting-up-a-maven-repository-manager-with-artifactory%2F\">Log
+ in now.<\/a>","stats":"Stats"}};
+/* ]]> */
+</script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var sharing_js_options = {"lang":"en","counts":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="4%28a%29.client-side_files/a_004"></script><div id="actionbar" class="actnbr-pub-twentyten actnbr-has-follow"><ul><li class="actnbr-btn actnbr-hidden"> 			    	<a class="actnbr-action actnbr-actn-follow" href=""><svg class="gridicon gridicon__follow" height="24px" width="24px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M23 16v2h-3v3h-2v-3h-3v-2h3v-3h2v3h3zM20 2v9h-4v3h-3v4H4c-1.1 0-2-.9-2-2V2h18zM8 13v-1H4v1h4zm3-3H4v1h7v-1zm0-2H4v1h7V8zm7-4H4v2h14V4z"></path></g></svg><span>Follow</span></a> 			    	<div class="actnbr-popover tip tip-top-left actnbr-notice"> 			    		<div class="tip-arrow"></div> 			    		<div class="tip-inner actnbr-follow-bubble"></div> 			    	</div> 			    </li><li class="actnbr-ellipsis actnbr-hidden"> 			  <svg class="gridicon gridicon__ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><circle cx="5" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle></g></svg> 			  <div class="actnbr-popover tip tip-top-left actnbr-more"> 			  	<div class="tip-arrow"></div> 			  	<div class="tip-inner"> 				  <ul> 				    <li class="actnbr-sitename actnbr-hidden"><a href="http://redstack.wordpress.com/"><img alt="" src="4%28a%29.client-side_files/wpcom-gray-white.png" class="avatar avatar-50" height="50" width="50"> RedStack</a></li> 				   	<li class="actnbr-folded-customize actnbr-hidden"><a href="https://redstack.wordpress.com/wp-admin/customize.php?url=https%3A%2F%2Fredstack.wordpress.com%2F2013%2F12%2F04%2Fsetting-up-a-maven-repository-manager-with-artifactory%2F"><svg class="gridicon gridicon__customize" height="20px" width="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M2 6c0-1.505.78-3.08 2-4 0 .845.69 2 2 2 1.657 0 3 1.343 3 3 0 .386-.08.752-.212 1.09.74.594 1.476 1.19 2.19 1.81L8.9 11.98c-.62-.716-1.214-1.454-1.807-2.192C6.753 9.92 6.387 10 6 10c-2.21 0-4-1.79-4-4zm12.152 6.848l1.34-1.34c.607.304 1.283.492 2.008.492 2.485 0 4.5-2.015 4.5-4.5 0-.725-.188-1.4-.493-2.007L18 9l-2-2 3.507-3.507C18.9 3.188 18.225 3 17.5 3 15.015 3 13 5.015 13 7.5c0 .725.188 1.4.493 2.007L3 20l2 2 6.848-6.848c1.885 1.928 3.874 3.753 5.977 5.45l1.425 1.148 1.5-1.5-1.15-1.425c-1.695-2.103-3.52-4.092-5.448-5.977z" data-reactid=".2.1.1:0.1b.0"></path></g></svg><span>Customize<span></span></span></a></li> 				    <li class="actnbr-folded-follow actnbr-hidden"><a class="actnbr-action actnbr-actn-follow" href=""><svg class="gridicon gridicon__follow" height="24px" width="24px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M23 16v2h-3v3h-2v-3h-3v-2h3v-3h2v3h3zM20 2v9h-4v3h-3v4H4c-1.1 0-2-.9-2-2V2h18zM8 13v-1H4v1h4zm3-3H4v1h7v-1zm0-2H4v1h7V8zm7-4H4v2h14V4z"></path></g></svg><span>Follow</span></a></li> 					<li class="actnbr-signup actnbr-hidden"><a href="https://wordpress.com/start/">Sign up</a></li> 				    <li class="actnbr-login actnbr-hidden"><a href="https://redstack.wordpress.com/wp-login.php?redirect_to=https%3A%2F%2Fredstack.wordpress.com%2F2013%2F12%2F04%2Fsetting-up-a-maven-repository-manager-with-artifactory%2F">Log in</a></li> 				     				    <li class="actnbr-shortlink actnbr-hidden"><a href="http://wp.me/pgVeO-MF">Copy shortlink</a></li> 				    <li class="flb-report actnbr-hidden"><a href="http://en.wordpress.com/abuse/">Report this content</a></li> 				     				     				    <li class="actnbr-subs actnbr-hidden"><a href="https://subscribe.wordpress.com/">Manage subscriptions</a></li> 				    <li class="actnbr-fold actnbr-hidden"><a href="">Collapse this bar</a></li> 			      </ul> 			    </div> 		      </div> 		    </li> 	      </ul></div>
+<script type="text/javascript">
+// <![CDATA[
+(function() {
+try{
+  if ( window.external &&'msIsSiteMode' in window.external) {
+    if (window.external.msIsSiteMode()) {
+      var jl = document.createElement('script');
+      jl.type='text/javascript';
+      jl.async=true;
+      jl.src='/wp-content/plugins/ie-sitemode/custom-jumplist.php';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jl, s);
+    }
+  }
+}catch(e){}
+})();
+// ]]>
+</script>		<iframe src="4%28a%29.client-side_files/master.html" scrolling="no" id="likes-master" name="likes-master" style="display:none;"></iframe>
+		<div id="likes-other-gravatars"><div class="likes-text"><span>%d</span> bloggers like this:</div><ul class="wpl-avatars sd-like-gravatars"></ul></div>
+		<script>
+			var _comscore = _comscore || [];
+			_comscore.push({
+				c1: "2",
+				c2: "7518284"
+			});
+			(function() {
+				var s = document.createElement("script"),
+					el = document.getElementsByTagName("script")[0];
+				s.defer = true;
+				s.src = (document.location.protocol == "https:" ? "https://sb" : "http://b") + ".scorecardresearch.com/beacon.js";
+				el.parentNode.insertBefore(s, el);
+			})();
+		</script>
+		<noscript>
+			<p class="robots-nocontent"><img 
+src="https://sb.scorecardresearch.com/p?c1=2&c2=7518284&c3=&c4=&c5=&c6=&c15=&cv=2.0&cj=1"
+ alt="" style="display:none;" width="1" height="1" /></p>
+		</noscript><script src="4%28a%29.client-side_files/w.js" type="text/javascript" async="" defer="defer"></script>
+<script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', 
+{'blog_id':'4033274','blog_tz':'-5','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+_stq.push(['view',
+ 
+{'blog':'4033274','v':'wpcom','tz':'-5','user_id':'0','post':'3017','subd':'redstack'}]);
+_stq.push(['extra',
+ 
+{'crypt':'UE40eW5QN0p8M2Y/RE1TaVhzUzFMbjdWNHpwZGhTayxPSUFCMGRVYVNrSFguN3FwSmQ5RGtNX3VQcj1yVzhiflM1THQtLGFdQ2toOXYlQjYrMC9LMGRJJjR6ajd1Lm9nQXNlX3RUODVsUjZzM1BLQVs1aC4zWTR5VTRZW09DQUdwcWJlSGpDZmc/NUU1Y01WaS9BQj0mTD9DbG9mMXBOJm1NTXEvJkFRR00lQ2NPQ3Y1bHZuUHVLWjQ2aFprWUswazVHRy4lUiU/dn5kQXouUFVlcmZjSTY2ZG9mWWN0WWs9bzUuWDFmTEFuUVdfTE49c0p1VlMzdD9hRy03ZEswUVhRNj9aP3hzaz1wVitmUmV6eGglUW1JWE5aSS5KemdXaFlpZ0FqLGU2c3dGT3RWd3F1W3UrNiZnRGIv'}]);
+_stq.push([
+ 'clickTrackerInit', '4033274', '3017' ]);
+	</script>
+<noscript><img src="https://pixel.wp.com/b.gif?v=noscript" style="height:0px;width:0px;overflow:hidden" alt="" /></noscript>
+<script>
+if ( 'object' === typeof wpcom_mobile_user_agent_info ) {
+
+	wpcom_mobile_user_agent_info.init();
+	var mobileStatsQueryString = "";
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedPlatformName )
+		mobileStatsQueryString += "&x_" + 'mobile_platforms' + '=' + 
+wpcom_mobile_user_agent_info.matchedPlatformName;
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedUserAgentName )
+		mobileStatsQueryString += "&x_" + 'mobile_devices' + '=' + 
+wpcom_mobile_user_agent_info.matchedUserAgentName;
+	
+	if( wpcom_mobile_user_agent_info.isIPad() )
+		mobileStatsQueryString += "&x_" + 'ipad_views' + '=' + 'views';
+
+	if( "" != mobileStatsQueryString ) {
+		new Image().src = document.location.protocol + 
+'//pixel.wp.com/g.gif?v=wpcom-no-pv' + mobileStatsQueryString + '&baba='
+ + Math.random();
+	}
+	
+}
+</script>
+
+
+<div id="sharing_email" style="display: none;">
+		<form action="/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/" method="post">
+			<label for="target_email">Send to Email Address</label>
+			<input name="target_email" id="target_email" type="email">
+
+			
+				<label for="source_name">Your Name</label>
+				<input name="source_name" id="source_name" type="text">
+
+				<label for="source_email">Your Email Address</label>
+				<input name="source_email" id="source_email" type="email">
+
+						<input id="jetpack-source_f_name" name="source_f_name" class="input" size="25" autocomplete="off" type="text">
+			<script> document.getElementById('jetpack-source_f_name').value = ''; </script>
+			<div class="recaptcha" id="sharing_recaptcha"></div><input name="recaptcha_public_key" id="recaptcha_public_key" value="6LcYW8MSAAAAADBAuEH9yaPcF7lWh11Iq62ZKtoo" type="hidden">
+			<img style="float: right; display: none" class="loading" src="4%28a%29.client-side_files/loading.gif" alt="loading" height="16" width="16">
+			<input value="Send Email" class="sharing_send" type="submit">
+			<a rel="nofollow" href="#cancel" class="sharing_cancel">Cancel</a>
+
+			<div class="errors errors-1" style="display: none;">
+				Post was not sent - check your email addresses!			</div>
+
+			<div class="errors errors-2" style="display: none;">
+				Email check failed, please try again			</div>
+
+			<div class="errors errors-3" style="display: none;">
+				Sorry, your blog cannot share posts by email.			</div>
+		</form>
+	</div><img src="4%28a%29.client-side_files/g.gif" alt=":)" id="wpstats"></body></html>
+<!--
+	generated in 0.146 seconds
+	74230 bytes batcached for 300 seconds
+-->

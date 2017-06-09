@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+
+  artifactory-service:
+    depends_on:
+     - mysql-service
+    container_name: artifactory-server
+    image: akhilrajmailbox/artifactory:artifactory-server
+    hostname: artifactory-server
+    restart: always
+    env_file: .env
+    volumes:
+     - $PWD/artifactory/artifactory-data/logs:/var/opt/jfrog/artifactory/logs:rw
+     - $PWD/artifactory/artifactory-data/data:/var/opt/jfrog/artifactory/data:rw
+     - $PWD/artifactory/artifactory-data/backup:/var/opt/jfrog/artifactory/backup:rw
+    ports:
+     - $PORT_NO:8081
+    tty: true
+
+
+  mysql-service:
+    container_name: artifactory-mysql
+    image: akhilrajmailbox/artifactory:mysql-server
+    hostname: artifactory-mysql
+    restart: always
+    env_file: .env
+    volumes:
+     - $PWD/artifactory/mysql-data:/data:rw
+    tty: true

@@ -1,0 +1,306 @@
+
+=======================================
+configuration >>
+=======================================
+
+step 1)
++++++++
+
+login to UI
+http://ip-address:port-no
+
+step 2)
++++++++
+
+close the welcome window, because we dont need the artifactory to create some default repo.
+
+step 3)
++++++++
+
+click on login button in the right upper side
+
+	username	:	admin
+	password	:	password
+
+step 4)
++++++++
+
+click on admin >> edit profile
+
+step 5)
++++++++
+
+configure your admin page with new passwords, email etc... and then save it.
+
+step 6)
++++++++
+
+click on the home button in top of the left side 
+in home page you can see the "user guide", you can use it if you want to be.
+
+
+=======================================
+General Configuration >>
+=======================================
+
+step 1)
++++++++
+
+admin >> General Configuration >> give the server name
+
+step 2)
++++++++
+
+Custom Message (optional) >> enable >> give the title and message
+
+
+=======================================
+create repository >>
+=======================================
+
+step 1)
++++++++
+
+click on the admin button of the left side menu (not the upper admin button)
+
+admin >> repository >> local
+
+step 2)
++++++++
+
+click on the new botton on the right side 
+choose the type (eg :: maven)
+pass the name which you want to give in repository key option
+
+step 3)
++++++++
+
+choose either "Handle Releases" or "Handle Snapshots" but not both.
+
+step 4)
++++++++
+
+click on save and finish
+
+
+=======================================
+security configuration >>
+=======================================
+
+step 1)
++++++++
+
+admin	>> security configuration >> uncheck the "Allow Anonymous Access"
+
+save
+
+
+permission for repo with user and group
+=======================================
+user creation >>
+=======================================
+
+step 1)
++++++++
+
+admin >> user >> click on new button >> configure it
+
+=======================================
+group creation >>
+=======================================
+
+step 1)
++++++++
+
+admin >> group >> click on new button >> add the user to the group >> gu=ive the privilleges for this group
+
+=======================================
+giving permission >>
+=======================================
+
+step 1)
++++++++
+
+admin >> permission >> click on new button >> give a unique name  >> choose the repo >> choose the group or user for serve the permission to that repo
+
+
+=======================================
+backup with cron job >>
+=======================================
+
+step 1)
++++++++
+
+admin >> services >> backup
+by default there are two backup scheme, backup-daily nad backup-weekly 
+
+you can delete it if you dont want and create a new with your specified time.
+
+=======================================
+creating new backup >>
+=======================================
+
+step 1)
++++++++
+
+admin >> services >> backup >> new >> give a unique name in backup key filed >> and configure
+
+
+
+cron expression ::
+
+step 2)
++++++++
+
+Format
+
+A cron expression is a string comprised of 6 or 7 fields separated by white space. Fields can contain any of the allowed values, along with various combinations of the allowed special characters for that field. The fields are as follows:
+
+```
+Field Name 		Mandatory 	Allowed Values 			Allowed Special Characters
+
+Seconds 		YES 		0-59 				, - * /
+Minutes 		YES 		0-59 				, - * /
+Hours 			YES 		0-23 				, - * /
+Day of month 		YES 		1-31 				, - * ? / L W
+Month 			YES 		1-12 or JAN-DEC 		, - * /
+Day of week 		YES 		1-7 or SUN-SAT 			, - * ? / L #
+Year 			NO 		empty, 1970-2099 		, - * /
+
+```
+
+So cron expressions can be as simple as this: * * * * ? *
+or more complex, like this: 0/5 14,18,3-39,52 * ? JAN,MAR,SEP MON-FRI 2002-2010
+
+
+eg :: job for take backup on everyday at 6.00 pm	::	0 0 18 * * ?
+
+
+for more info :: 
+http://www.quartz-scheduler.org/documentation/quartz-2.x/tutorials/crontrigger
+
+
+
+step 3)
++++++++
+
+select the path (use the mounted location named as backup while run the docker container) >> choose the repo >> save
+
+
+=======================================
+advanced options >>
+=======================================
+
+
+you can see the different kind of servers informations 
+
+```
+
+*	Log
+*	Analytics
+*	System Logs
+*	System Info
+*	Maintenance
+*	Storage
+*	Config Descriptor
+*	Security Descriptor
+
+```
+
+
+
+=========================================================
+client side configuration for deploying to maven repo >>
+=========================================================
+
+step 1)
++++++++
+
+install maven in the client side machine.
+
+step 2)
++++++++
+
+mkdir ~/.m2
+
+step 3)
++++++++
+
+mvn -emp <<some master password>>
+configure the "~/.m2/settings-security.xml" with the output of above command as follow >>>
+
+<settingsSecurity>
+  <master>{q8ZNbOgFAG4HO3xm/gyFMbPi7od9p39TM4QQdiUsfQ0=}</master>
+</settingsSecurity>
+
+step 4)
++++++++
+
+configure the username, password, repo id, repo name, repo url etc... >>
+mvn -ep userpassword
+
+the userpassword is the password of artifactory user who have permission to write the repo
+copy the output and you need this for confiure "~/.m2/settings.xml"
+
+
+nano ~/.m2/settings.xml
+
+
+
+<settings>
+<profiles>
+<profile>
+<id>vivasa-artifactory-releases</id>
+
+<repositories>
+
+<repository>
+<id>central1</id>
+<name>vivasa-artifactory-releases1</name>
+<url>http://192.168.1.106:8081/artifactory/vivasa-release</url>
+<releases>
+<enabled>true</enabled>
+</releases>
+<snapshots>
+<enabled>false</enabled>
+</snapshots>
+</repository>
+
+</repositories>
+
+</profile>
+</profiles>
+<activeProfiles>
+<activeProfile>vivasa-artifactory-releases</activeProfile>
+</activeProfiles>
+
+<servers>
+<server>
+<id>central1</id>
+<username>test</username>
+<password>{eQttJHI9USEHztgwR9QPiUpljPVckEaTnl4vnKaqzkg=}</password>
+</server>
+</servers>
+</settings>
+
+
+
+=======================================
+deployment >>
+=======================================
+once configured, test it by deploy any file to the repo ::
+
+
+mvn deploy:deploy-file \
+-Durl=http://192.168.1.106:9888/artifactory/vivasa-release \
+-DrepositoryId=central \
+-Dfile=test.txt \
+-DgroupId=mysql \
+-DartifactId=test \
+-Dversion=1.1.2
+
+
+
+
+
+

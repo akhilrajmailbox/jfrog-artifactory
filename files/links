@@ -1,0 +1,46 @@
+
+
+======================================
+installation >>
+======================================
+https://hostpresto.com/community/tutorials/how-to-install-jfrog-artifactory-on-ubuntu-14-04/
+apt-get install apt-transport-https
+
+
+======================================
+nginx configuration for upload error >>
+======================================
+https://www.cyberciti.biz/faq/linux-unix-bsd-nginx-413-request-entity-too-large/
+
+
+======================================
+UI configuration >>
+======================================
+most of the initial config ::
+use "user guide" from UI for intial set up
+https://www.jfrog.com/confluence/display/RTF
+
+permission ::
+https://www.jfrog.com/confluence/display/RTF/Managing+Permissions
+
+
+======================================
+setting up maven repo >>
+======================================
+https://www.youtube.com/watch?v=CLIX-dwEKGw
+
+
+======================================
+client side configuration and uploading >>
+======================================
+https://redstack.wordpress.com/2013/12/04/setting-up-a-maven-repository-manager-with-artifactory/
+http://maven.apache.org/guides/mini/guide-encryption.html
+https://stackoverflow.com/questions/25237875/how-to-know-groupid-and-artifactid-of-any-external-jars-in-maven-android-project
+
+
+======================================
+importing and exporting >>
+======================================
+https://www.jfrog.com/confluence/display/RTF/Importing+and+Exporting
+
+
