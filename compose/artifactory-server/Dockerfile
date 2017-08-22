@@ -26,7 +26,7 @@ run apt-get update && apt-get install apt-transport-https mysql-client maven -y
 run wget -c -O- "https://bintray.com/user/downloadSubjectPublicKey?username=jfrog" | apt-key add -
 run sh -c 'echo "deb https://bintray.com/artifact/download/jfrog/artifactory-debs trusty main" | tee -a /etc/apt/sources.list.d/artifactory-oss.list'
 run apt-get update
-run apt-get -y install jfrog-artifactory-oss
+run apt-get -y install jfrog-artifactory-oss=5.4.3
 
 
 env ARTIFACTORY_HOME /var/opt/jfrog/artifactory
