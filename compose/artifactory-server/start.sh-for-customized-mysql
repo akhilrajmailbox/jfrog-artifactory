@@ -31,7 +31,7 @@ if [ "$MYSQL_HOST" = "" ]; then
 cat <<EOF >> /etc/opt/jfrog/artifactory/storage.properties
 type=mysql
 driver=com.mysql.jdbc.Driver
-url=jdbc:mysql://mysql-service:3306/$MYSQL_DATABASE?characterEncoding=UTF-8&elideSetAutoCommits=true
+url=jdbc:mysql://artifactory-mysql:3306/$MYSQL_DATABASE?characterEncoding=UTF-8&elideSetAutoCommits=true
 username=$MYSQL_USER
 password=$MYSQL_USER_PASSWORD
 EOF
