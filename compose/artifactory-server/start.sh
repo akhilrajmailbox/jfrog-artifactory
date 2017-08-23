@@ -24,7 +24,12 @@ echo ""
 exit 0
 else
 
+
+cp -r /root/artifactory/* /var/opt/jfrog/artifactory/
+mkdir -p /var/opt/jfrog/artifactory/{data,logs,backup}
 chown -R artifactory:artifactory $ARTIFACTORY_HOME
+
+     if [ ! -e  $ARTIFACTORY_HOME/data/db.properties-org ]; then
 
 if [ "$MYSQL_HOST" = "" ]; then
 
@@ -53,10 +58,14 @@ password=$MYSQL_PASSWORD
 EOF
 
 fi
+cp -r /etc/opt/jfrog/artifactory/storage.properties $ARTIFACTORY_HOME/data/db.properties-org
+     fi
 
- if [ ! -e $ARTIFACTORY_HOME/etc/db.properties-org ]; then
-cp -r $ARTIFACTORY_HOME/etc/db.properties $ARTIFACTORY_HOME/etc/db.properties-org && cp -r /etc/opt/jfrog/artifactory/storage.properties $ARTIFACTORY_HOME/etc/db.properties
- fi
+
+cp -r $ARTIFACTORY_HOME/data/db.properties-org $ARTIFACTORY_HOME/etc/db.properties
+cp -r $ARTIFACTORY_HOME/data/db.properties-org /etc/opt/jfrog/artifactory/storage.properties
+chown -R artifactory:artifactory /etc/opt/jfrog/artifactory/storage.properties
+chown -R artifactory:artifactory $ARTIFACTORY_HOME
 service artifactory start
 tailf /var/opt/jfrog/artifactory/tomcat/logs/catalina.out
 fi
