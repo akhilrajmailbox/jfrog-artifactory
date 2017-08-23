@@ -10,14 +10,12 @@ services:
 #    build:
 #      context: ../dockerfiles
 #      dockerfile: Dockerfile-artifactory-server
+#    restart: always
     hostname: artifactory-server
     container_name: artifactory-server
-#    restart: always
     env_file: .env
     volumes:
-     - $PWD/artifactory/artifactory-data/logs:/var/opt/jfrog/artifactory/logs:rw
-     - $PWD/artifactory/artifactory-data/data:/var/opt/jfrog/artifactory/data:rw
-     - $PWD/artifactory/artifactory-data/backup:/var/opt/jfrog/artifactory/backup:rw
+     - $PWD/artifactory/artifactory-data:/var/opt/jfrog/artifactory:rw
     ports:
      - $PORT_NO:8081
     working_dir: /var/opt/jfrog/artifactory
@@ -29,9 +27,9 @@ services:
 #    build:
 #      context: ../dockerfiles
 #      dockerfile: Dockerfile-artifactory-mysql
+#    restart: always
     hostname: artifactory-mysql
     container_name: artifactory-mysql
-#    restart: always
     env_file: .env
     volumes:
      - $PWD/artifactory/mysql-data:/var/lib/mysql:rw
