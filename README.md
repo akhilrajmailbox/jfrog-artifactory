@@ -61,10 +61,10 @@ Configure credentials in .env file
 	- username for mysql user
 	- example :: MYSQL_USER=artifactuser
 
-* MYSQL_USER_PASSWORD
+* MYSQL_PASSWORD
 
 	- password for mysql MYSQL_USER user
-	- example :: MYSQL_USER_PASSWORD=artifact@user
+	- example :: MYSQL_PASSWORD=artifact@user
 
 * MYSQL_DATABASE
 
